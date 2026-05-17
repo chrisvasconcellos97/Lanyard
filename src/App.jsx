@@ -852,8 +852,7 @@ function ScheduleMtgModal(props) {
     <Modal onClose={props.onClose} title={"Schedule - "+partner.name}>
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
         {[{l:"Start Time",k:"time",p:"e.g. 10:30 AM"},{l:"End Time",k:"end",p:"e.g. 11:00 AM"}].map(function(x){return <div key={x.k}><FL>{x.l}</FL><input value={f[x.k]} onChange={function(e){sf(x.k,e.target.value);}} placeholder={x.p} style={inp}/></div>;})}
-        <div><FL>Location</FL><AddressSearch value={f.location} onChange={function(v){sf("location",v);})}
-</div>
+        <div><FL>Location</FL><AddressSearch value={f.location} onChange={function(v){sf("location",v);}}/></div>
         <div><FL>Day</FL><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{DAYS.filter(function(d){return d.key!=="thu";}).map(function(d){return <button key={d.key} onClick={function(){sf("day",d.key);}} style={{padding:"6px 12px",borderRadius:20,cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"'DM Sans',sans-serif",background:f.day===d.key?C.accent:C.bgDark,color:f.day===d.key?"#fff":C.textMuted,border:"1px solid "+(f.day===d.key?C.accent:C.border)}}>{d.label+" "+d.date}</button>;})}</div></div>
         {props.openSlots.length > 0 ? <div><div style={{fontSize:11,color:C.textMuted,fontWeight:600,marginBottom:4}}>Open slots:</div>{props.openSlots.map(function(s){var dd=DAYS.find(function(d){return d.key===s.day;})||{label:""};return <div key={s.id} style={{fontSize:11,color:C.purple}}>{"- "+dd.label+" "+s.time+" - "+s.end}</div>;})}</div> : null}
         <GreenBtn onClick={function(){props.onAdd(f);}} style={{width:"100%",padding:"12px",fontSize:14,borderRadius:24}}>Add to Schedule</GreenBtn>
@@ -870,8 +869,7 @@ function AddEventModal(props) {
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
         <div><FL>Type</FL><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Partner Meeting","Conference","Meal/Reception","Keynote","Other"].map(function(t){return <button key={t} onClick={function(){sf("type",t);}} style={{padding:"6px 10px",borderRadius:20,cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"'DM Sans',sans-serif",background:f.type===t?(TRACK_COLORS[t]||C.accent):C.bgDark,color:f.type===t?"#fff":C.textMuted,border:"1px solid "+(f.type===t?(TRACK_COLORS[t]||C.accent):C.border)}}>{t}</button>;})}</div></div>
         {[{l:"Title",k:"title",p:"Event name"},{l:"Start Time",k:"time",p:"e.g. 10:30 AM"},{l:"End Time",k:"end",p:"e.g. 11:00 AM"}].map(function(x){return <div key={x.k}><FL>{x.l}</FL><input value={f[x.k]} onChange={function(e){sf(x.k,e.target.value);}} placeholder={x.p} style={inp}/></div>;})}
-        <div><FL>Location</FL><AddressSearch value={f.location} onChange={function(v){sf("location",v);})}
-</div>
+        <div><FL>Location</FL><AddressSearch value={f.location} onChange={function(v){sf("location",v);}}/></div>
         {f.type==="Partner Meeting" ? <div><FL>Partner</FL><select value={f.partnerId} onChange={function(e){sf("partnerId",e.target.value);}} style={inp}><option value="">Select...</option>{props.partners.map(function(p){return <option key={p.id} value={p.id}>{p.name}</option>;})}</select></div> : null}
         <div><FL>Day</FL><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{DAYS.filter(function(d){return d.key!=="thu";}).map(function(d){return <button key={d.key} onClick={function(){sf("day",d.key);}} style={{padding:"6px 12px",borderRadius:20,cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"'DM Sans',sans-serif",background:f.day===d.key?C.accent:C.bgDark,color:f.day===d.key?"#fff":C.textMuted,border:"1px solid "+(f.day===d.key?C.accent:C.border)}}>{d.label+" "+d.date}</button>;})}</div></div>
         <GreenBtn onClick={function(){props.onAdd(f);}} style={{width:"100%",padding:"12px",fontSize:14,borderRadius:24}}>Add to Schedule</GreenBtn>
