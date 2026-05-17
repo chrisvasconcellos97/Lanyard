@@ -1500,14 +1500,14 @@ function Onboarding(props) {
   if (imported) return (
     <div style={{ fontFamily:"'DM Sans',sans-serif", background:C.bg, minHeight:"100vh", color:C.text }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-      <SessionPickerModal importedSessions={imported} onConfirm={function(sel){props.onImport(sel);props.onDone();}} onClose={function(){setImported(null);})}
+      <SessionPickerModal importedSessions={imported} onConfirm={function(sel){props.onImport(sel);props.onDone();}} onClose={function(){setImported(null);}}/>
 
     </div>
   );
   if (showImport) return (
     <div style={{ fontFamily:"'DM Sans',sans-serif", background:C.bg, minHeight:"100vh", color:C.text }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-      <AIImportModal onClose={function(){setShowImport(false);}} onImport={function(s){setImported(s);setShowImport(false);})}
+      <AIImportModal onClose={function(){setShowImport(false);}} onImport={function(s){setImported(s);setShowImport(false);}}/>
 
     </div>
   );
