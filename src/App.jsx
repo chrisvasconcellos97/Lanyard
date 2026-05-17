@@ -201,7 +201,7 @@ function getRoleCtx(role,customTitle){
   return"You are Pip, an AI assistant. The user is the day-to-day Account Manager POC. Give full detail - every open item, full context, what to lead with.";
 }
 function askPip(prompt,role,customTitle,ctx,cb){
-  fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:800,system:getRoleCtx(role,customTitle),messages:[{role:"user",content:(ctx?ctx+"\n\n":"")+prompt]})})
+  fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:800,system:getRoleCtx(role,customTitle),messages:[{role:"user",content:(ctx?ctx+"\n\n":"")+prompt}]})})
   .then(function(r){return r.json();}).then(function(d){cb(null,(d.content&&d.content[0]&&d.content[0].text)||"Pip couldn't respond right now.");}).catch(function(){cb(null,"Pip couldn't respond right now.");});
 }
 function buildPartnerCtx(p){
