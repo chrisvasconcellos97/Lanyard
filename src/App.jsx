@@ -11,14 +11,15 @@ const C = {
 const SUPABASE_URL = "https://yrpdjmyfidhxlpmxasao.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycGRqbXlmaWRoeGxwbXhhc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg3NDQsImV4cCI6MjA5NDU1NDc0NH0.tutTq1raFxA3HKUWsfYsUJtCZeQfswc3tFh7sqUM2RA";
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
-const DATA_VERSION = "6";
-const TEAM_ID = "abpa2026_team";
+const DATA_VERSION = "1";
+const TEAM_ID_PREFIX = "lanyard_team_";
+const TEAM_ID = TEAM_ID_PREFIX + "default";
 
 const DAYS = [
-  { key: "mon", label: "Mon", date: "18", full: "Monday, May 18" },
-  { key: "tue", label: "Tue", date: "19", full: "Tuesday, May 19" },
-  { key: "wed", label: "Wed", date: "20", full: "Wednesday, May 20" },
-  { key: "thu", label: "Thu", date: "21", full: "Thursday, May 21" },
+  { key: "mon", label: "Mon", date: "1", full: "Day 1" },
+  { key: "tue", label: "Tue", date: "2", full: "Day 2" },
+  { key: "wed", label: "Wed", date: "3", full: "Day 3" },
+  { key: "thu", label: "Thu", date: "4", full: "Day 4" },
 ];
 
 const TRACK_COLORS = {
@@ -44,152 +45,18 @@ const ROLES = [
 ];
 
 const TEAM = [
-  { key: "C", name: "Chris Vasconcellos", title: "Sr. Account Manager", color: "#4A9B82" },
-  { key: "K", name: "Kyle McChesney",     title: "VP Operations",       color: "#86EFAC" },
-  { key: "T", name: "Tony Pisciotta",     title: "Dir. of Aftermarket", color: "#E8873A" },
+  { key: "A", name: "Attendee 1", title: "Account Manager", color: "#4A9B82" },
+  { key: "B", name: "Attendee 2", title: "Director",        color: "#86EFAC" },
+  { key: "C", name: "Attendee 3", title: "VP",              color: "#E8873A" },
 ];
 
-const VENUES = {
-  "Grapefruit Basil":          { address: "45640 CA-74, Palm Desert, CA 92260",            phone: "(760) 674-8666" },
-  "Eureka Indian Wells":       { address: "44491 Indian Wells Ln, Indian Wells, CA 92210", phone: "(760) 834-6898" },
-  "Vicky's of Santa Fe":       { address: "45100 Club Dr, Indian Wells, CA 92210",         phone: "(760) 345-9770" },
-  "Tommy Bahama Restaurant":   { address: "73595 El Paseo, Palm Desert, CA 92260",         phone: "(760) 836-0188" },
-  "Grand Ballroom":            { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "White Sands Terrace":       { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "Grand Lawn":                { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "Side Parking Lot":          { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "Resort Lobby":              { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "Lobby":                     { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-  "Foyer outside White Sands": { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
-};
-
+const VENUES = {};
 const HOTEL_DEFAULT = {
-  name: "Indian Wells Resort Hotel",
-  address: "76661 Highway 111, Indian Wells, CA 92210",
-  phone: "(760) 345-6466",
-  checkIn: "May 18, 2026",
-  checkOut: "May 21, 2026",
-  roomNumber: "",
+  name: "", address: "", phone: "", checkIn: "", checkOut: "", roomNumber: "",
 };
-
-const KNOWN_VENUES = [
-  { name: "Indian Wells Resort Hotel", address: "76661 Highway 111, Indian Wells, CA 92210" },
-  { name: "Grapefruit Basil",          address: "45640 CA-74, Palm Desert, CA 92260" },
-  { name: "Eureka Indian Wells",       address: "44491 Indian Wells Ln, Indian Wells, CA 92210" },
-  { name: "Vicky's of Santa Fe",       address: "45100 Club Dr, Indian Wells, CA 92210" },
-  { name: "Tommy Bahama Restaurant",   address: "73595 El Paseo, Palm Desert, CA 92260" },
-  { name: "PSP Airport",               address: "3400 E Tahquitz Canyon Way, Palm Springs, CA 92262" },
-  { name: "Grand Ballroom",            address: "Indian Wells Resort Hotel, 76661 Hwy 111" },
-  { name: "Resort Lobby",              address: "Indian Wells Resort Hotel, 76661 Hwy 111" },
-];
-
-const INIT_PARTNERS = [
-  {
-    id: "p1", name: "LKQ", revenue: "$222M", tier: "Major", status: "red",
-    objective: "Deliver root-cause analysis for the recent outage.",
-    scheduledMeeting: "5/19 7:00 PM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [{ id: "oi1", text: "Deliver root-cause analysis for the recent outage.", done: false }],
-    attendees: [
-      { id: "a1", name: "Mark Scafati", title: "VP Sales and Marketing",       poc: true,  notes: "Primary decision maker" },
-      { id: "a2", name: "Justin Clark", title: "Sr. Director Strategic Sales", poc: false, notes: "Day to day" },
-    ],
-  },
-  {
-    id: "p2", name: "Empire Auto Parts", revenue: "$29M", tier: "Mid", status: "yellow",
-    objective: "", scheduledMeeting: "", unscheduled: true, rating: 0, pastNotes: "",
-    openItems: [], attendees: [{ id: "a3", name: "Dale", title: "", poc: true, notes: "" }],
-  },
-  {
-    id: "p3", name: "KSI", revenue: "$20M", tier: "Mid", status: "yellow",
-    objective: "Finalize invoice feed and discuss CAPA certifications.",
-    scheduledMeeting: "5/19 5:00 PM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [
-      { id: "oi2", text: "Finalize KSI invoice feed.", done: false },
-      { id: "oi3", text: "Shop audit in progress.", done: false },
-      { id: "oi4", text: "Discuss missing CAPA certifications.", done: false },
-    ],
-    attendees: [
-      { id: "a5", name: "Eric Taylor",   title: "Sr. MSO Manager", poc: true,  notes: "Operational lead" },
-      { id: "a6", name: "Mike Ferguson", title: "President",       poc: false, notes: "Executive sponsor" },
-    ],
-  },
-  {
-    id: "p4", name: "All Star Auto Parts", revenue: "$18.2M", tier: "Mid", status: "green",
-    objective: "Classic Collision pilot go-live and Blackburn strategy.",
-    scheduledMeeting: "5/20 1:00 PM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [
-      { id: "oi5", text: "Salvage pilot with Classic Collision - awaiting go-live.", done: false },
-      { id: "oi6", text: "Understand Blackburn plan.", done: false },
-    ],
-    attendees: [{ id: "a7", name: "AJ Tyler", title: "VP of Sales", poc: true, notes: "Decision maker" }],
-  },
-  {
-    id: "p5", name: "Parts Authority", revenue: "$4.9M", tier: "Mid", status: "green",
-    objective: "Support recent regional rollouts.",
-    scheduledMeeting: "5/20 9:00 AM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [{ id: "oi7", text: "Supporting all recent regional rollouts.", done: false }],
-    attendees: [{ id: "a10", name: "Chris Northrup", title: "", poc: true, notes: "Primary" }],
-  },
-  {
-    id: "p6", name: "UCC", revenue: "$3.8M", tier: "Mid", status: "green",
-    objective: "Check in and relationship building.",
-    scheduledMeeting: "5/19 11:00 AM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [],
-    attendees: [
-      { id: "a15", name: "Joseph Tsai", title: "SVP",      poc: true,  notes: "Senior sponsor" },
-      { id: "a16", name: "Donny Mason", title: "Director", poc: false, notes: "" },
-    ],
-  },
-  {
-    id: "p7", name: "Collision Auto Parts", revenue: "$2.9M", tier: "Growth", status: "green",
-    objective: "Relationship check-in.",
-    scheduledMeeting: "5/19 12:00 PM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [],
-    attendees: [{ id: "a18", name: "Blake Kidwell", title: "CEO", poc: true, notes: "Decision maker" }],
-  },
-  {
-    id: "p8", name: "Pacific Best", revenue: "$2M", tier: "Growth", status: "yellow",
-    objective: "Potential meet up.", scheduledMeeting: "", unscheduled: true, rating: 0, pastNotes: "",
-    openItems: [], attendees: [],
-  },
-  {
-    id: "p9", name: "1-800 Radiator", revenue: "$1.9M", tier: "Growth", status: "red",
-    objective: "Review audit progress and warehouse corrections.",
-    scheduledMeeting: "5/19 9:00 AM", unscheduled: false, rating: 0, pastNotes: "",
-    openItems: [
-      { id: "oi8", text: "1,600 new integrations completed 5/13.", done: false },
-      { id: "oi9", text: "3,000 shops still pending warehouse correction.", done: false },
-    ],
-    attendees: [
-      { id: "a19", name: "Lindsay Klimek", title: "Sr. Manager Business Systems", poc: true,  notes: "Day to day lead" },
-      { id: "a21", name: "Jay Kurzman",    title: "President",                    poc: false, notes: "Executive sponsor" },
-    ],
-  },
-];
-
-const INIT_SESSIONS = [
-  { id: 1,  day: "mon", time: "12:02 PM", end: "",         title: "Kyle Arrives",               location: "PSP Airport",               track: "Logistics",       attendees: ["K"],         notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 2,  day: "mon", time: "1:44 PM",  end: "",         title: "Tony and Chris Arrive",      location: "PSP Airport",               track: "Logistics",       attendees: ["C","T"],     notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 3,  day: "mon", time: "3:00 PM",  end: "",         title: "Registration Opens",         location: "Foyer outside White Sands", track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 4,  day: "mon", time: "6:00 PM",  end: "9:00 PM",  title: "Welcome Reception",          location: "White Sands Terrace",       track: "Meal/Reception",  attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 5,  day: "tue", time: "9:00 AM",  end: "10:30 AM", title: "1-800 Radiator Breakfast",   location: "Grapefruit Basil",          track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p9", isParent: false, isChild: false },
-  { id: 6,  day: "tue", time: "11:00 AM", end: "11:30 AM", title: "UCC Meeting",                location: "Resort Lobby",              track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p6", isParent: false, isChild: false },
-  { id: 7,  day: "tue", time: "12:00 PM", end: "1:30 PM",  title: "Collision Auto Parts Lunch", location: "Eureka Indian Wells",       track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p7", isParent: false, isChild: false },
-  { id: 8,  day: "tue", time: "3:00 PM",  end: "5:00 PM",  title: "Business Session - Keynotes",location: "Grand Ballroom",           track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: true,  isChild: false },
-  { id: 9,  day: "tue", time: "3:00 PM",  end: "3:30 PM",  title: "Edward Salamy - Opening",    location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
-  { id: 10, day: "tue", time: "3:30 PM",  end: "4:30 PM",  title: "Greg Horn - Industry Update",location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
-  { id: 11, day: "tue", time: "4:30 PM",  end: "5:00 PM",  title: "Justin Rzepka - Legislative",location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
-  { id: 12, day: "tue", time: "5:00 PM",  end: "6:00 PM",  title: "KSI Collision Meeting",      location: "TBD",                      track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p3", isParent: false, isChild: false },
-  { id: 13, day: "tue", time: "6:00 PM",  end: "7:00 PM",  title: "Cocktail Reception",         location: "Grand Lawn",               track: "Meal/Reception",  attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 14, day: "tue", time: "7:00 PM",  end: "9:00 PM",  title: "LKQ Dinner",                 location: "Vicky's of Santa Fe",      track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p1", isParent: false, isChild: false },
-  { id: 15, day: "wed", time: "9:00 AM",  end: "10:30 AM", title: "Parts Authority Breakfast",  location: "Grapefruit Basil",         track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p5", isParent: false, isChild: false },
-  { id: 16, day: "wed", time: "11:30 AM", end: "12:00 PM", title: "Board Candidates Intro",     location: "Grand Ballroom",           track: "Conference",      attendees: ["C","K","T"], notes: "Joseph Tsai introduction", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 17, day: "wed", time: "1:00 PM",  end: "2:30 PM",  title: "All Star Auto Parts Lunch",  location: "Tommy Bahama Restaurant",  track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p4", isParent: false, isChild: false },
-  { id: 18, day: "wed", time: "3:00 PM",  end: "3:30 PM",  title: "XL / TPH Meeting",           location: "Lobby",                    track: "Partner Meeting", attendees: ["C","K","T"], notes: "Delvis Rodriguez - Michael Krause", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 19, day: "wed", time: "5:00 PM",  end: "6:00 PM",  title: "NABC Vehicle Giveaway",      location: "Side Parking Lot",         track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 20, day: "wed", time: "7:00 PM",  end: "10:00 PM", title: "Offsite Dinner",             location: "TBD",                      track: "Meal/Reception",  attendees: ["C","K","T"], notes: "Shots in the Night", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-  { id: 21, day: "thu", time: "",         end: "",         title: "Travel Day",                 location: "",                         track: "Logistics",       attendees: ["C","K","T"], notes: "Safe travels!", status: "upcoming", partnerId: null, isParent: false, isChild: false },
-];
+const KNOWN_VENUES = [];
+const INIT_PARTNERS = [];
+const INIT_SESSIONS = [];
 // ---- HELPERS ----
 function toRgb(hex) {
   if (!hex || hex[0] !== "#") return "0,0,0";
@@ -439,6 +306,33 @@ function sbSave(sessions, partners, hotel, quickNote) {
     headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
     body: JSON.stringify({ user_id: uid, hotel: hotel, quick_note: quickNote }),
   }).catch(function() {});
+}
+
+function sbSaveNotification(msg, who) {
+  fetch(SUPABASE_URL + "/rest/v1/notifications", {
+    method: "POST",
+    headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
+    body: JSON.stringify({
+      id: TEAM_ID + "_" + Date.now(),
+      team_id: TEAM_ID,
+      message: msg,
+      who: who,
+      created_at: new Date().toISOString(),
+    }),
+  }).catch(function() {});
+}
+
+function sbLoadNotifications(cb) {
+  fetch(
+    SUPABASE_URL + "/rest/v1/notifications?team_id=eq." + TEAM_ID + "&order=created_at.desc&limit=30&select=id,message,who,created_at",
+    { headers: sbH() }
+  ).then(function(r) {
+    return r.json();
+  }).then(function(d) {
+    cb(null, Array.isArray(d) ? d : []);
+  }).catch(function() {
+    cb(null, []);
+  });
 }
 
 function sbSaveShareCode(code, data, cb) {
@@ -2848,7 +2742,57 @@ function PendingView(props) {
     </div>
   );
 }
-// ---- MAIN APP ----
+function NotificationsModal(props) {
+  const [notifs, setNotifs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(function() {
+    sbLoadNotifications(function(err, data) {
+      setNotifs(data || []);
+      setLoading(false);
+    });
+  }, []);
+
+  function timeAgo(dateStr) {
+    var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+    if (diff < 60) return "just now";
+    if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+    if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+    return Math.floor(diff / 86400) + "d ago";
+  }
+
+  return (
+    <Modal onClose={props.onClose} title="Team Activity">
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {loading && (
+          <div style={{ textAlign: "center", padding: "20px", color: C.textMuted, fontSize: 13 }}>
+            Loading...
+          </div>
+        )}
+        {!loading && notifs.length === 0 && (
+          <div style={{ textAlign: "center", padding: "20px", color: C.textMuted, fontSize: 13 }}>
+            No activity yet
+          </div>
+        )}
+        {notifs.map(function(n) {
+          return (
+            <div
+              key={n.id}
+              style={{ background: C.bgDark, border: "1px solid " + C.border, borderRadius: 10, padding: "11px 14px" }}
+            >
+              <div style={{ fontSize: 13, color: C.text, lineHeight: 1.5 }}>{n.message}</div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5 }}>
+                <span style={{ fontSize: 10, color: C.accent }}>{n.who || "Team"}</span>
+                <span style={{ fontSize: 10, color: C.textMuted }}>{timeAgo(n.created_at)}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Modal>
+  );
+}
+// ---- MAIN APP (BLANK VERSION) ----
 export default function Lanyard() {
   const inviteParams = useMemo(function() { return getInviteParams(); }, []);
   const [inviteDone, setInviteDone] = useState(function() {
@@ -2867,7 +2811,7 @@ export default function Lanyard() {
     try { return localStorage.getItem("lanyard_custom_title") || ""; } catch (e) { return ""; }
   });
   const [view, setView] = useState("home");
-  const [day, setDay] = useState(getCurrentDayKey);
+  const [day, setDay] = useState("mon");
   const [sessions, setSess] = useState(function() {
     var s = loadLocal();
     return s ? s.sessions : INIT_SESSIONS;
@@ -2905,9 +2849,17 @@ export default function Lanyard() {
   const [showDebrief, setDebrief] = useState(false);
   const [showRelHealth, setRelHealth] = useState(false);
   const [showShare, setShare] = useState(false);
+  const [showNotifs, setShowNotifs] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [lastSeenNotif, setLastSeenNotif] = useState(function() {
+    try { return localStorage.getItem("lanyard_last_notif") || ""; } catch (e) { return ""; }
+  });
   const [srchQ, setSrchQ] = useState("");
   const [now, setNow] = useState(function() { return new Date(); });
   const [alertMsg, setAlertMsg] = useState(null);
+  const [conferenceName, setConferenceName] = useState(function() {
+    try { return localStorage.getItem("lanyard_conf_name") || "My Conference"; } catch (e) { return "My Conference"; }
+  });
 
   useEffect(function() {
     sbLoad(function(data) {
@@ -2942,60 +2894,24 @@ export default function Lanyard() {
   }, []);
 
   useEffect(function() {
-    var confDay = getConferenceDayKey(now);
-    if (!confDay) return;
-    var nowMins = now.getHours() * 60 + now.getMinutes();
-    setSess(function(prev) {
-      return prev.map(function(s) {
-        if (!s.time || s.isChild || s.day !== confDay) return s;
-        var start = parseTime(s.time);
-        var end = s.end ? parseTime(s.end) : start + 60;
-        var status = nowMins >= start && nowMins < end ? "in-progress" : nowMins >= end ? "complete" : "upcoming";
-        return status !== s.status ? Object.assign({}, s, { status: status }) : s;
+    function pollNotifs() {
+      sbLoadNotifications(function(err, data) {
+        if (!data || data.length === 0) return;
+        var lastSeen = lastSeenNotif ? parseInt(lastSeenNotif) : 0;
+        var newCount = data.filter(function(n) {
+          return new Date(n.created_at).getTime() > lastSeen;
+        }).length;
+        setUnreadCount(newCount);
       });
-    });
-  }, [now]);
-
-  useEffect(function() {
-    var confDay = getConferenceDayKey(now);
-    if (!confDay) return;
-    var nowMins = now.getHours() * 60 + now.getMinutes();
-    var upcoming = sessions.filter(function(x) {
-      return !x.isChild && x.time && x.status === "upcoming" && x.day === confDay;
-    });
-    for (var i = 0; i < upcoming.length; i++) {
-      var diff = parseTime(upcoming[i].time) - nowMins;
-      if (diff === 10) { setAlertMsg(upcoming[i].title + " starts in 10 minutes"); break; }
-      if (diff === 5)  { setAlertMsg(upcoming[i].title + " starts in 5 minutes");  break; }
     }
-  }, [now, sessions]);
-
-  useEffect(function() {
-    if (alertMsg) {
-      var t = setTimeout(function() { setAlertMsg(null); }, 6000);
-      return function() { clearTimeout(t); };
-    }
-  }, [alertMsg]);
-
-  useEffect(function() {
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7175&longitude=-116.3422&current=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1")
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d && d.current) setWeather({ temp: Math.round(d.current.temperature_2m), code: d.current.weathercode });
-      })
-      .catch(function() {});
-  }, []);
-
-  useEffect(function() {
-    setSess(function(prev) {
-      var withSlots = autoGenerateOpenSlots(prev);
-      var prevAuto = prev.filter(function(s) { return typeof s.id === "string" && s.id.indexOf("auto_") === 0; }).length;
-      var newAuto = withSlots.filter(function(s) { return typeof s.id === "string" && s.id.indexOf("auto_") === 0; }).length;
-      return prevAuto !== newAuto ? withSlots : prev;
-    });
-  }, [sessions.filter(function(s) { return s.track !== "Open Slot"; }).length]);
+    pollNotifs();
+    var t = setInterval(pollNotifs, 30000);
+    return function() { clearInterval(t); };
+  }, [lastSeenNotif]);
 
   function notify(msg) { setToast(msg); setTimeout(function() { setToast(null); }, 2800); }
+
+  var roleLabel = role === "custom" ? customTitle : (ROLES.find(function(r) { return r.id === role; }) || { label: "Account Manager" }).label;
 
   function updateS(id, f, v) {
     setSess(function(p) { return p.map(function(s) { return s.id === id ? Object.assign({}, s, { [f]: v }) : s; }); });
@@ -3021,11 +2937,12 @@ export default function Lanyard() {
     setSelP(function(p) { return p && p.id === draft.id ? Object.assign({}, draft) : p; });
     setEditP(null);
     notify("Partner updated");
+    sbSaveNotification(roleLabel + " updated " + draft.name, roleLabel);
   }
   function addEvent(f) {
     if (!f.title || !f.time) return;
     var s = Object.assign({}, f, {
-      id: Date.now(), track: f.type, attendees: ["C","K","T"],
+      id: Date.now(), track: f.type, attendees: ["A","B","C"],
       isParent: false, isChild: false, status: "upcoming", partnerId: f.partnerId || null,
     });
     setSess(function(p) { return p.concat([s]); });
@@ -3033,6 +2950,7 @@ export default function Lanyard() {
     setAddE(false);
     setSchedP(null);
     notify("Event added");
+    sbSaveNotification(roleLabel + " added " + f.title, roleLabel);
   }
   function addPartner(f) {
     if (!f.name) return;
@@ -3041,6 +2959,7 @@ export default function Lanyard() {
     });
     setAddP(false);
     notify("Partner added");
+    sbSaveNotification(roleLabel + " added partner: " + f.name, roleLabel);
   }
   function handleImport(importedSessions) {
     var mapped = importedSessions.map(function(s, i) {
@@ -3049,7 +2968,7 @@ export default function Lanyard() {
         day: s.day && s.day.toString().includes("1") ? "mon" : s.day && s.day.toString().includes("2") ? "tue" : s.day && s.day.toString().includes("3") ? "wed" : "thu",
         time: s.time || "9:00 AM", end: s.end || "",
         title: s.title || "Untitled", location: s.location || "",
-        track: s.track || "Conference", attendees: ["C","K","T"],
+        track: s.track || "Conference", attendees: ["A","B","C"],
         notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false,
       };
     });
@@ -3096,8 +3015,6 @@ export default function Lanyard() {
       p: partners.filter(function(x) { return x.name.toLowerCase().includes(q); }),
     };
   }, [srchQ, sessions, partners]);
-
-  var roleLabel = role === "custom" ? customTitle : (ROLES.find(function(r) { return r.id === role; }) || { label: "Account Manager" }).label;
 
   if (inviteParams && !inviteDone) {
     return (
@@ -3147,11 +3064,33 @@ export default function Lanyard() {
                   <div style={{ fontSize: 17, fontWeight: 500, color: C.text, letterSpacing: "0.02em" }}>Lanyard</div>
                   <PipMark size={7} color={C.accent} opacity={0.5} />
                 </div>
-                <div style={{ fontSize: 9, color: C.textMuted, letterSpacing: "0.1em" }}>{"ABPA 2026 | " + roleLabel.toUpperCase()}</div>
+                <div style={{ fontSize: 9, color: C.textMuted, letterSpacing: "0.1em" }}>{roleLabel.toUpperCase()}</div>
               </div>
             </div>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              <button onClick={function() { setSearch(!showSearch); }} style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 16, padding: "4px" }}>{"🔍"}</button>
+              <button
+                onClick={function() { setSearch(!showSearch); }}
+                style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 16, padding: "4px" }}
+              >
+                {"🔍"}
+              </button>
+              <div style={{ position: "relative" }}>
+                <button
+                  onClick={function() {
+                    setShowNotifs(true);
+                    setUnreadCount(0);
+                    var ts = String(Date.now());
+                    setLastSeenNotif(ts);
+                    try { localStorage.setItem("lanyard_last_notif", ts); } catch (e) {}
+                  }}
+                  style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 16, padding: "4px" }}
+                >
+                  {"🔔"}
+                </button>
+                {unreadCount > 0 && (
+                  <div style={{ position: "absolute", top: 0, right: 0, width: 8, height: 8, borderRadius: "50%", background: C.red, border: "1px solid " + C.bg }} />
+                )}
+              </div>
               <button onClick={function() { setShare(true); }} style={Object.assign({}, btnBase, { background: C.bgCardAlt, color: C.textSub, border: "1px solid " + C.border, fontSize: 11, padding: "6px 10px" })}>Share</button>
               <button onClick={function() { setImport(true); }} style={Object.assign({}, btnBase, { background: C.bgCardAlt, color: C.textSub, border: "1px solid " + C.border, fontSize: 11, padding: "6px 10px" })}>Import</button>
               <GreenBtn onClick={function() { setAddE(true); }} style={{ fontSize: 11, padding: "7px 13px" }}>+ Add</GreenBtn>
@@ -3219,11 +3158,11 @@ export default function Lanyard() {
       )}
 
       <div style={{ padding: "16px 18px 100px", maxWidth: 480, margin: "0 auto" }}>
-        {view === "home"      && <HomeView sessions={sessions} partners={partners} now={now} hotel={hotel} weather={weather} onSelectP={function(p) { setSelP(p); }} onHotel={function() { setHotelM(true); }} onExport={function() { setExport(true); }} quickNote={quickNote} onQuickNote={function() { setShowQN(true); }} onPipDay={function() { setPipDay(true); }} onBriefing={function() { setBriefing(true); }} onDebrief={function() { setDebrief(true); }} onRelHealth={function() { setRelHealth(true); }} />}
-        {view === "schedule"  && <ScheduleView sessions={sessions} day={day} onSelectS={function(s) { setSelS(s); }} onSelectV={function(v) { setVM(v); }} conflicts={conflicts} />}
-        {view === "team"      && <TeamView sessions={sessions} day={day} />}
-        {view === "partners"  && <PartnersView partners={partners} onSelect={function(p) { setSelP(p); }} onSchedule={function(p) { setSchedP(p); setSelP(null); }} onEdit={function(p) { setEditP(Object.assign({}, p)); }} onAdd={function() { setAddP(true); }} />}
-        {view === "pending"   && <PendingView partners={partners} sessions={sessions} onSchedule={function(p) { setSchedP(p); }} />}
+        {view === "home"     && <HomeView sessions={sessions} partners={partners} now={now} hotel={hotel} weather={weather} onSelectP={function(p) { setSelP(p); }} onHotel={function() { setHotelM(true); }} onExport={function() { setExport(true); }} quickNote={quickNote} onQuickNote={function() { setShowQN(true); }} onPipDay={function() { setPipDay(true); }} onBriefing={function() { setBriefing(true); }} onDebrief={function() { setDebrief(true); }} onRelHealth={function() { setRelHealth(true); }} />}
+        {view === "schedule" && <ScheduleView sessions={sessions} day={day} onSelectS={function(s) { setSelS(s); }} onSelectV={function(v) { setVM(v); }} conflicts={conflicts} />}
+        {view === "team"     && <TeamView sessions={sessions} day={day} />}
+        {view === "partners" && <PartnersView partners={partners} onSelect={function(p) { setSelP(p); }} onSchedule={function(p) { setSchedP(p); setSelP(null); }} onEdit={function(p) { setEditP(Object.assign({}, p)); }} onAdd={function() { setAddP(true); }} />}
+        {view === "pending"  && <PendingView partners={partners} sessions={sessions} onSchedule={function(p) { setSchedP(p); }} />}
       </div>
 
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 18px 28px" }}>
@@ -3264,6 +3203,7 @@ export default function Lanyard() {
       {showDebrief && <DebriefModal onClose={function() { setDebrief(false); }} sessions={sessions} partners={partners} role={role} customTitle={customTitle} />}
       {showRelHealth && <RelHealthModal onClose={function() { setRelHealth(false); }} partners={partners} role={role} customTitle={customTitle} />}
       {showShare && <ShareModal onClose={function() { setShare(false); }} sessions={sessions} partners={partners} hotel={hotel} />}
+      {showNotifs && <NotificationsModal onClose={function() { setShowNotifs(false); }} />}
 
       <style>{`
         * { box-sizing: border-box; }
