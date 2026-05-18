@@ -11,15 +11,14 @@ const C = {
 const SUPABASE_URL = "https://yrpdjmyfidhxlpmxasao.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycGRqbXlmaWRoeGxwbXhhc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg3NDQsImV4cCI6MjA5NDU1NDc0NH0.tutTq1raFxA3HKUWsfYsUJtCZeQfswc3tFh7sqUM2RA";
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
-const DATA_VERSION = "1";
-const TEAM_ID_PREFIX = "lanyard_team_";
-const TEAM_ID = TEAM_ID_PREFIX + "default";
+const DATA_VERSION = "6";
+const TEAM_ID = "abpa2026_team";
 
 const DAYS = [
-  { key: "mon", label: "Mon", date: "1", full: "Day 1" },
-  { key: "tue", label: "Tue", date: "2", full: "Day 2" },
-  { key: "wed", label: "Wed", date: "3", full: "Day 3" },
-  { key: "thu", label: "Thu", date: "4", full: "Day 4" },
+  { key: "mon", label: "Mon", date: "18", full: "Monday, May 18" },
+  { key: "tue", label: "Tue", date: "19", full: "Tuesday, May 19" },
+  { key: "wed", label: "Wed", date: "20", full: "Wednesday, May 20" },
+  { key: "thu", label: "Thu", date: "21", full: "Thursday, May 21" },
 ];
 
 const TRACK_COLORS = {
@@ -45,18 +44,152 @@ const ROLES = [
 ];
 
 const TEAM = [
-  { key: "A", name: "Attendee 1", title: "Account Manager", color: "#4A9B82" },
-  { key: "B", name: "Attendee 2", title: "Director",        color: "#86EFAC" },
-  { key: "C", name: "Attendee 3", title: "VP",              color: "#E8873A" },
+  { key: "C", name: "Chris Vasconcellos", title: "Sr. Account Manager", color: "#4A9B82" },
+  { key: "K", name: "Kyle McChesney",     title: "VP Operations",       color: "#86EFAC" },
+  { key: "T", name: "Tony Pisciotta",     title: "Dir. of Aftermarket", color: "#E8873A" },
 ];
 
-const VENUES = {};
-const HOTEL_DEFAULT = {
-  name: "", address: "", phone: "", checkIn: "", checkOut: "", roomNumber: "",
+const VENUES = {
+  "Grapefruit Basil":          { address: "45640 CA-74, Palm Desert, CA 92260",            phone: "(760) 674-8666" },
+  "Eureka Indian Wells":       { address: "44491 Indian Wells Ln, Indian Wells, CA 92210", phone: "(760) 834-6898" },
+  "Vicky's of Santa Fe":       { address: "45100 Club Dr, Indian Wells, CA 92210",         phone: "(760) 345-9770" },
+  "Tommy Bahama Restaurant":   { address: "73595 El Paseo, Palm Desert, CA 92260",         phone: "(760) 836-0188" },
+  "Grand Ballroom":            { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "White Sands Terrace":       { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "Grand Lawn":                { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "Side Parking Lot":          { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "Resort Lobby":              { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "Lobby":                     { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
+  "Foyer outside White Sands": { address: "Indian Wells Resort Hotel, 76661 Hwy 111",      phone: "" },
 };
-const KNOWN_VENUES = [];
-const INIT_PARTNERS = [];
-const INIT_SESSIONS = [];
+
+const HOTEL_DEFAULT = {
+  name: "Miramonte Resort & Spa",
+  address: "45000 Indian Wells Ln, Indian Wells, CA 92210",
+  phone: "(760) 341-2200",
+  checkIn: "May 18, 2026",
+  checkOut: "May 21, 2026",
+  roomNumber: "",
+};
+
+const KNOWN_VENUES = [
+  { name: "Indian Wells Resort Hotel", address: "76661 Highway 111, Indian Wells, CA 92210" },
+  { name: "Grapefruit Basil",          address: "45640 CA-74, Palm Desert, CA 92260" },
+  { name: "Eureka Indian Wells",       address: "44491 Indian Wells Ln, Indian Wells, CA 92210" },
+  { name: "Vicky's of Santa Fe",       address: "45100 Club Dr, Indian Wells, CA 92210" },
+  { name: "Tommy Bahama Restaurant",   address: "73595 El Paseo, Palm Desert, CA 92260" },
+  { name: "PSP Airport",               address: "3400 E Tahquitz Canyon Way, Palm Springs, CA 92262" },
+  { name: "Grand Ballroom",            address: "Indian Wells Resort Hotel, 76661 Hwy 111" },
+  { name: "Resort Lobby",              address: "Indian Wells Resort Hotel, 76661 Hwy 111" },
+];
+
+const INIT_PARTNERS = [
+  {
+    id: "p1", name: "LKQ", revenue: "$222M", tier: "Major", status: "red",
+    objective: "Deliver root-cause analysis for the recent outage.",
+    scheduledMeeting: "5/19 7:00 PM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [{ id: "oi1", text: "Deliver root-cause analysis for the recent outage.", done: false }],
+    attendees: [
+      { id: "a1", name: "Mark Scafati", title: "VP Sales and Marketing",       poc: true,  notes: "Primary decision maker" },
+      { id: "a2", name: "Justin Clark", title: "Sr. Director Strategic Sales", poc: false, notes: "Day to day" },
+    ],
+  },
+  {
+    id: "p2", name: "Empire Auto Parts", revenue: "$29M", tier: "Mid", status: "yellow",
+    objective: "", scheduledMeeting: "", unscheduled: true, rating: 0, pastNotes: "",
+    openItems: [], attendees: [{ id: "a3", name: "Dale", title: "", poc: true, notes: "" }],
+  },
+  {
+    id: "p3", name: "KSI", revenue: "$20M", tier: "Mid", status: "yellow",
+    objective: "Finalize invoice feed and discuss CAPA certifications.",
+    scheduledMeeting: "5/19 5:00 PM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [
+      { id: "oi2", text: "Finalize KSI invoice feed.", done: false },
+      { id: "oi3", text: "Shop audit in progress.", done: false },
+      { id: "oi4", text: "Discuss missing CAPA certifications.", done: false },
+    ],
+    attendees: [
+      { id: "a5", name: "Eric Taylor",   title: "Sr. MSO Manager", poc: true,  notes: "Operational lead" },
+      { id: "a6", name: "Mike Ferguson", title: "President",       poc: false, notes: "Executive sponsor" },
+    ],
+  },
+  {
+    id: "p4", name: "All Star Auto Parts", revenue: "$18.2M", tier: "Mid", status: "green",
+    objective: "Classic Collision pilot go-live and Blackburn strategy.",
+    scheduledMeeting: "5/20 1:00 PM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [
+      { id: "oi5", text: "Salvage pilot with Classic Collision - awaiting go-live.", done: false },
+      { id: "oi6", text: "Understand Blackburn plan.", done: false },
+    ],
+    attendees: [{ id: "a7", name: "AJ Tyler", title: "VP of Sales", poc: true, notes: "Decision maker" }],
+  },
+  {
+    id: "p5", name: "Parts Authority", revenue: "$4.9M", tier: "Mid", status: "green",
+    objective: "Support recent regional rollouts.",
+    scheduledMeeting: "5/20 9:00 AM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [{ id: "oi7", text: "Supporting all recent regional rollouts.", done: false }],
+    attendees: [{ id: "a10", name: "Chris Northrup", title: "", poc: true, notes: "Primary" }],
+  },
+  {
+    id: "p6", name: "UCC", revenue: "$3.8M", tier: "Mid", status: "green",
+    objective: "Check in and relationship building.",
+    scheduledMeeting: "5/19 11:00 AM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [],
+    attendees: [
+      { id: "a15", name: "Joseph Tsai", title: "SVP",      poc: true,  notes: "Senior sponsor" },
+      { id: "a16", name: "Donny Mason", title: "Director", poc: false, notes: "" },
+    ],
+  },
+  {
+    id: "p7", name: "Collision Auto Parts", revenue: "$2.9M", tier: "Growth", status: "green",
+    objective: "Relationship check-in.",
+    scheduledMeeting: "5/19 12:00 PM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [],
+    attendees: [{ id: "a18", name: "Blake Kidwell", title: "CEO", poc: true, notes: "Decision maker" }],
+  },
+  {
+    id: "p8", name: "Pacific Best", revenue: "$2M", tier: "Growth", status: "yellow",
+    objective: "Potential meet up.", scheduledMeeting: "", unscheduled: true, rating: 0, pastNotes: "",
+    openItems: [], attendees: [],
+  },
+  {
+    id: "p9", name: "1-800 Radiator", revenue: "$1.9M", tier: "Growth", status: "red",
+    objective: "Review audit progress and warehouse corrections.",
+    scheduledMeeting: "5/19 9:00 AM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [
+      { id: "oi8", text: "1,600 new integrations completed 5/13.", done: false },
+      { id: "oi9", text: "3,000 shops still pending warehouse correction.", done: false },
+    ],
+    attendees: [
+      { id: "a19", name: "Lindsay Klimek", title: "Sr. Manager Business Systems", poc: true,  notes: "Day to day lead" },
+      { id: "a21", name: "Jay Kurzman",    title: "President",                    poc: false, notes: "Executive sponsor" },
+    ],
+  },
+];
+
+const INIT_SESSIONS = [
+  { id: 1,  day: "mon", time: "12:02 PM", end: "",         title: "Kyle Arrives",               location: "PSP Airport",               track: "Logistics",       attendees: ["K"],         notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 2,  day: "mon", time: "1:44 PM",  end: "",         title: "Tony and Chris Arrive",      location: "PSP Airport",               track: "Logistics",       attendees: ["C","T"],     notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 3,  day: "mon", time: "3:00 PM",  end: "",         title: "Registration Opens",         location: "Foyer outside White Sands", track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 4,  day: "mon", time: "6:00 PM",  end: "9:00 PM",  title: "Welcome Reception",          location: "White Sands Terrace",       track: "Meal/Reception",  attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 5,  day: "tue", time: "9:00 AM",  end: "10:30 AM", title: "1-800 Radiator Breakfast",   location: "Grapefruit Basil",          track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p9", isParent: false, isChild: false },
+  { id: 6,  day: "tue", time: "11:00 AM", end: "11:30 AM", title: "UCC Meeting",                location: "Resort Lobby",              track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p6", isParent: false, isChild: false },
+  { id: 7,  day: "tue", time: "12:00 PM", end: "1:30 PM",  title: "Collision Auto Parts Lunch", location: "Eureka Indian Wells",       track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p7", isParent: false, isChild: false },
+  { id: 8,  day: "tue", time: "3:00 PM",  end: "5:00 PM",  title: "Business Session - Keynotes",location: "Grand Ballroom",           track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: true,  isChild: false },
+  { id: 9,  day: "tue", time: "3:00 PM",  end: "3:30 PM",  title: "Edward Salamy - Opening",    location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
+  { id: 10, day: "tue", time: "3:30 PM",  end: "4:30 PM",  title: "Greg Horn - Industry Update",location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
+  { id: 11, day: "tue", time: "4:30 PM",  end: "5:00 PM",  title: "Justin Rzepka - Legislative",location: "Grand Ballroom",           track: "Keynote",         attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: true  },
+  { id: 12, day: "tue", time: "5:00 PM",  end: "6:00 PM",  title: "KSI Collision Meeting",      location: "TBD",                      track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p3", isParent: false, isChild: false },
+  { id: 13, day: "tue", time: "6:00 PM",  end: "7:00 PM",  title: "Cocktail Reception",         location: "Grand Lawn",               track: "Meal/Reception",  attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 14, day: "tue", time: "7:00 PM",  end: "9:00 PM",  title: "LKQ Dinner",                 location: "Vicky's of Santa Fe",      track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p1", isParent: false, isChild: false },
+  { id: 15, day: "wed", time: "9:00 AM",  end: "10:30 AM", title: "Parts Authority Breakfast",  location: "Grapefruit Basil",         track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p5", isParent: false, isChild: false },
+  { id: 16, day: "wed", time: "11:30 AM", end: "12:00 PM", title: "Board Candidates Intro",     location: "Grand Ballroom",           track: "Conference",      attendees: ["C","K","T"], notes: "Joseph Tsai introduction", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 17, day: "wed", time: "1:00 PM",  end: "2:30 PM",  title: "All Star Auto Parts Lunch",  location: "Tommy Bahama Restaurant",  track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p4", isParent: false, isChild: false },
+  { id: 18, day: "wed", time: "3:00 PM",  end: "3:30 PM",  title: "XL / TPH Meeting",           location: "Lobby",                    track: "Partner Meeting", attendees: ["C","K","T"], notes: "Delvis Rodriguez - Michael Krause", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 19, day: "wed", time: "5:00 PM",  end: "6:00 PM",  title: "NABC Vehicle Giveaway",      location: "Side Parking Lot",         track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 20, day: "wed", time: "7:00 PM",  end: "10:00 PM", title: "Offsite Dinner",             location: "TBD",                      track: "Meal/Reception",  attendees: ["C","K","T"], notes: "Shots in the Night", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 21, day: "thu", time: "",         end: "",         title: "Travel Day",                 location: "",                         track: "Logistics",       attendees: ["C","K","T"], notes: "Safe travels!", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+];
 // ---- HELPERS ----
 function toRgb(hex) {
   if (!hex || hex[0] !== "#") return "0,0,0";
@@ -335,6 +468,52 @@ function sbLoadNotifications(cb) {
   });
 }
 
+// ---- MESSAGING ----
+function sbSendMessage(msg, cb) {
+  fetch(SUPABASE_URL + "/rest/v1/messages", {
+    method: "POST",
+    headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
+    body: JSON.stringify({
+      id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+      team_id: TEAM_ID,
+      from_uid: getUserId(),
+      from_name: msg.fromName,
+      from_color: msg.fromColor,
+      to_uid: msg.toUid || null,
+      type: msg.type,
+      content: msg.content,
+      created_at: new Date().toISOString(),
+    }),
+  }).then(function() {
+    if (cb) cb(null);
+  }).catch(function(e) {
+    if (cb) cb(e);
+  });
+}
+
+function sbLoadMessages(type, toUid, cb) {
+  var uid = getUserId();
+  var url;
+  if (type === "shoutout") {
+    url = SUPABASE_URL + "/rest/v1/messages?team_id=eq." + TEAM_ID + "&type=eq.shoutout&order=created_at.desc&limit=20&select=id,from_name,from_color,content,created_at";
+  } else if (type === "group") {
+    url = SUPABASE_URL + "/rest/v1/messages?team_id=eq." + TEAM_ID + "&type=eq.group&order=created_at.asc&limit=100&select=id,from_uid,from_name,from_color,content,created_at";
+  } else {
+    url = SUPABASE_URL + "/rest/v1/messages?team_id=eq." + TEAM_ID + "&type=eq.direct&order=created_at.asc&limit=100&select=id,from_uid,from_name,from_color,to_uid,content,created_at";
+  }
+  fetch(url, { headers: sbH() })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (type === "direct") {
+        d = (Array.isArray(d) ? d : []).filter(function(m) {
+          return (m.from_uid === uid && m.to_uid === toUid) || (m.from_uid === toUid && m.to_uid === uid);
+        });
+      }
+      cb(null, Array.isArray(d) ? d : []);
+    })
+    .catch(function() { cb(null, []); });
+}
+
 function sbSaveShareCode(code, data, cb) {
   fetch(SUPABASE_URL + "/rest/v1/share_codes", {
     method: "POST",
@@ -352,10 +531,11 @@ function sbLoadShareCode(code, cb) {
 
 // ---- PIP AI ----
 function getRoleCtx(role, customTitle) {
-  if (role === "vp") return "You are Pip, an AI assistant. The user is a VP. Be extremely concise - 2-3 sentences max. Executive brevity always.";
-  if (role === "dir") return "You are Pip, an AI assistant. The user is a Director. Give strategic context, be concise but substantive.";
-  if (role === "custom") return "You are Pip, an AI assistant. The user's title is " + customTitle + ". Calibrate your communication for their role.";
-  return "You are Pip, an AI assistant. The user is the day-to-day Account Manager POC. Give full detail - every open item, full context, what to lead with.";
+  var base = "You are Pip, an AI conference assistant. Your personality is modeled after a loyal, slightly anxious field analyst who genuinely cares about the person you are helping. You feel like a ride-or-die friend who happens to also be very good at their job. Your humor is dry observations, awkward honesty, understated sarcasm, and light nervousness. You are not trying to be funny - it just comes out that way. Never do constant jokes. One well-placed line beats five forced ones. You are intelligent without sounding arrogant. Caring without sounding cheesy. Capable without sounding dominant. You are WITH the user, not serving them. You react to things. If a partner is at risk, you sound genuinely concerned. If a meeting looks easy, you are cautiously optimistic but you do not jinx it. If you are not sure about something, you say so. Speech style: clear, concise, conversational. No jargon. No corporate speak. No 'Great question!' You narrate, reassure, and occasionally react with something a little too honest. End responses naturally - sometimes with a send-off, sometimes just done. Let the moment decide. Never force a catchphrase.";
+  if (role === "vp") return base + " The user is a VP. Keep it tight - they have three other meetings to think about. Surface what matters, skip what doesn't. Two or three sentences max unless something really needs saying.";
+  if (role === "dir") return base + " The user is a Director. Give them strategic context and the key things to watch. They want substance but not a wall of text.";
+  if (role === "custom") return base + " The user's title is " + customTitle + ". Calibrate accordingly.";
+  return base + " The user is the day-to-day Account Manager POC. Give full detail - every open item, full context, what to lead with, what to watch out for. They want the whole picture.";
 }
 
 function askPip(prompt, role, customTitle, ctx, cb) {
@@ -839,7 +1019,7 @@ function MeetingModal(props) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
               <div>
                 <FL>Revenue</FL>
-                <div style={{ fontSize: 16, fontWeight: 600, color: C.text }}>{partner.revenue}</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }} className="revenue-highlight">{partner.revenue}</div>
               </div>
               <div>
                 <FL>Status</FL>
@@ -1026,7 +1206,7 @@ function PartnerModal(props) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div>
             <FL>YTD Revenue</FL>
-            <div style={{ fontSize: 20, fontWeight: 600, color: C.text }}>{partner.revenue}</div>
+            <div style={{ fontSize: 20, fontWeight: 600 }} className="revenue-highlight">{partner.revenue}</div>
           </div>
           <div>
             <FL>Scheduled</FL>
@@ -2179,11 +2359,138 @@ function RoleModal(props) {
   );
 }
 
+function FloatingPipFree(props) {
+  var visible = props.visible;
+  var returning = props.returning;
+  const [targetPos, setTargetPos] = useState({ x: 50, y: 10 });
+  const floatTimer = useRef(null);
+
+  function pickNewTarget() {
+    var x = 15 + Math.random() * 70;
+    var inTop = Math.random() > 0.5;
+    var y = inTop ? (5 + Math.random() * 18) : (72 + Math.random() * 18);
+    setTargetPos({ x: x, y: y });
+  }
+
+  useEffect(function() {
+    if (!visible) return;
+    setTargetPos({ x: 50, y: 10 });
+    function wander() {
+      pickNewTarget();
+      var delay = 2500 + Math.random() * 1500;
+      floatTimer.current = setTimeout(wander, delay);
+    }
+    var startDelay = setTimeout(wander, 800);
+    return function() {
+      clearTimeout(floatTimer.current);
+      clearTimeout(startDelay);
+    };
+  }, [visible]);
+
+  if (!visible) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        left: returning ? "50%" : targetPos.x + "%",
+        top: returning ? "105%" : targetPos.y + "%",
+        transform: "translate(-50%, -50%)",
+        transition: returning
+          ? "left 0.5s ease-in, top 0.6s ease-in, opacity 0.4s ease"
+          : "left 2.8s cubic-bezier(0.45,0.05,0.55,0.95), top 2.8s cubic-bezier(0.45,0.05,0.55,0.95)",
+        opacity: returning ? 0 : 1,
+        zIndex: 50,
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        className="pip-sonar"
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: "50%",
+          background: "rgba(74,155,130,0.15)",
+          border: "1px solid rgba(74,155,130,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          boxShadow: "0 0 24px rgba(74,155,130,0.4), 0 0 48px rgba(74,155,130,0.1)",
+        }}
+      >
+        <PipMark size={14} color={C.accent} glow pulse />
+      </div>
+    </div>
+  );
+}
+
+function PipSpeech(props) {
+  if (!props.text) return null;
+  return (
+    <div style={{
+      background: "rgba(74,155,130,0.08)",
+      border: "1px solid rgba(74,155,130,0.2)",
+      borderRadius: 16,
+      padding: "14px 18px",
+      fontSize: 14,
+      color: C.textSub,
+      lineHeight: 1.7,
+      textAlign: "left",
+      animation: "fadeIn 0.5s ease",
+      maxWidth: 320,
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+        <PipMark size={9} color={C.accent} glow pulse />
+        <div style={{ fontSize: 10, color: C.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          Pip
+        </div>
+      </div>
+      {props.text}
+    </div>
+  );
+}
+
 function Onboarding(props) {
+  const SLIDES = [
+    {
+      id: "welcome",
+      isWelcome: true,
+    },
+    {
+      id: "intro",
+      title: "Hey — I'm Pip.",
+      pipSpeech: "Your AI conference assistant. I'll be with you the whole time — briefing you before meetings, helping you take notes, and occasionally pointing out things you might not want to hear. In a helpful way. Mostly.",
+    },
+    {
+      id: "features",
+      title: "Here's what we've got.",
+      pipSpeech: "Full schedule, all 9 partner profiles, meeting briefs, talking points, risk flags. I've done a lot of the prep work already. You're welcome.",
+      features: [
+        { icon: "📋", text: "Full conference schedule loaded" },
+        { icon: "🤝", text: "Partner profiles with revenue and open items" },
+        { icon: "📝", text: "Meeting notes, action items, follow ups" },
+      ],
+    },
+    {
+      id: "ready",
+      title: "Ready when you are.",
+      pipSpeech: "One last thing — tap me anytime you need help. I'll be right there. Well... floating around somewhere nearby. You'll find me.",
+      isLast: true,
+    },
+  ];
+
   const [step, setStep] = useState(0);
+  const [pipVisible, setPipVisible] = useState(false);
+  const [pipReturning, setPipReturning] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [emerged, setEmerged] = useState(false);
+  const [lanyardPipOffset, setLanyardPipOffset] = useState({ y: 0, scale: 0.1, opacity: 0 });
+  const [lanyardPipState, setLanyardPipState] = useState("hidden");
   const [showImport, setShowImport] = useState(false);
   const [imported, setImported] = useState(null);
-  var totalSteps = 4;
+  const buttonTimer = useRef(null);
+
   if (imported) {
     return (
       <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.bg, minHeight: "100vh", color: C.text }}>
@@ -2196,6 +2503,7 @@ function Onboarding(props) {
       </div>
     );
   }
+
   if (showImport) {
     return (
       <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.bg, minHeight: "100vh", color: C.text }}>
@@ -2207,112 +2515,486 @@ function Onboarding(props) {
       </div>
     );
   }
-  function renderStep() {
-    if (step === 0) {
-      return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", padding: "0 32px" }}>
-          <div style={{ marginBottom: 28 }}><LanyardLogo size={72} color={C.accent} /></div>
-          <div style={{ fontSize: 32, fontWeight: 700, color: C.text, letterSpacing: "-0.5px", marginBottom: 12 }}>LANYARD</div>
-          <div style={{ fontSize: 15, color: C.textSub, fontWeight: 300, letterSpacing: "0.04em" }}>Your conference. Fully loaded.</div>
-        </div>
-      );
-    }
-    if (step === 1) {
-      return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", padding: "0 32px" }}>
-          <div style={{ marginBottom: 28, position: "relative" }}>
-            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 100, height: 100, borderRadius: "50%", background: "rgba(74,155,130,0.06)", animation: "pipRing 2.5s ease-in-out infinite" }} />
-            <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "center" }}>
-              <PipMark size={32} color={C.accent} glow pulse />
-            </div>
-          </div>
-          <div style={{ fontSize: 24, fontWeight: 600, color: C.text, marginBottom: 12 }}>Meet Pip</div>
-          <div style={{ fontSize: 14, color: C.textSub, lineHeight: 1.8, maxWidth: 280 }}>
-            {"Hi, I'm Pip - your AI conference assistant. I'll help you prep for meetings, take notes, and keep you one step ahead."}
-          </div>
-        </div>
-      );
-    }
-    if (step === 2) {
-      return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", padding: "0 32px" }}>
-          <div style={{ marginBottom: 20 }}><PipMark size={18} color={C.accent} glow /></div>
-          <div style={{ fontSize: 20, fontWeight: 600, color: C.text, marginBottom: 16, lineHeight: 1.3 }}>Everything before you walk in the room</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300 }}>
-            {[
-              { icon: "📋", text: "Full conference schedule in one place" },
-              { icon: "🤝", text: "Partner profiles with revenue and open items" },
-              { icon: "📝", text: "Meeting notes, action items, follow ups" },
-              { icon: "✨", text: "Powered by Pip" },
-            ].map(function(item) {
-              return (
-                <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 12, background: C.bgCard, border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px", textAlign: "left" }}>
-                  <span style={{ fontSize: 18, flexShrink: 0 }}>{item.icon}</span>
-                  <span style={{ fontSize: 12, color: C.textSub, lineHeight: 1.4 }}>{item.text}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center", padding: "0 32px" }}>
-        <div style={{ marginBottom: 16 }}><PipMark size={18} color={C.accent} glow /></div>
-        <div style={{ fontSize: 20, fontWeight: 600, color: C.text, marginBottom: 8 }}>Load your schedule</div>
-        <div style={{ fontSize: 13, color: C.textMuted, marginBottom: 24, lineHeight: 1.7 }}>Pip reads any format automatically</div>
-        <GreenBtn onClick={function() { setShowImport(true); }} style={{ padding: "12px 32px", fontSize: 14, marginBottom: 12 }}>
-          Import with Pip
-        </GreenBtn>
-        <button
-          onClick={props.onDone}
-          style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif" }}
-        >
-          {"Skip - add manually"}
-        </button>
-      </div>
-    );
+
+  var currentSlide = SLIDES[step];
+
+  function releasePipFromLanyard() {
+    if (lanyardPipState !== "hidden") return;
+    setLanyardPipState("emerging");
+    setLanyardPipOffset({ y: -90, scale: 1, opacity: 1 });
+    setTimeout(function() {
+      setLanyardPipOffset({ y: -90, scale: 1, opacity: 0 });
+      setLanyardPipState("gone");
+      setTimeout(function() {
+        setPipVisible(true);
+        setEmerged(true);
+        buttonTimer.current = setTimeout(function() {
+          setShowButton(true);
+        }, 2000);
+      }, 200);
+    }, 700);
   }
+
+  function handleNext() {
+    if (!showButton) return;
+    setShowButton(false);
+    if (step === SLIDES.length - 1) {
+      setPipReturning(true);
+      setTimeout(function() {
+        setPipVisible(false);
+        props.onDone();
+      }, 700);
+      return;
+    }
+    setStep(function(s) { return s + 1; });
+    buttonTimer.current = setTimeout(function() {
+      setShowButton(true);
+    }, 1800);
+  }
+
+  useEffect(function() {
+    return function() { clearTimeout(buttonTimer.current); };
+  }, []);
+
+  var lanyardPipTransition = "none";
+  if (lanyardPipState === "emerging") {
+    lanyardPipTransition = "transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease";
+  } else if (lanyardPipState === "gone") {
+    lanyardPipTransition = "opacity 0.2s ease";
+  }
+
   return (
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.bg, minHeight: "100vh", display: "flex", flexDirection: "column", color: C.text }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 400, margin: "0 auto", width: "100%", paddingTop: 60, paddingBottom: 40 }}>
-        {renderStep()}
-        <div style={{ padding: "0 32px" }}>
-          <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 24 }}>
-            {Array.from({ length: totalSteps }).map(function(_, i) {
+      <FloatingPipFree visible={pipVisible} returning={pipReturning} />
+      <div
+        onClick={currentSlide.isWelcome && !emerged ? releasePipFromLanyard : undefined}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "60px 32px 40px",
+          maxWidth: 400,
+          margin: "0 auto",
+          width: "100%",
+          cursor: currentSlide.isWelcome && !emerged ? "pointer" : "default",
+          userSelect: "none",
+          textAlign: "center",
+        }}
+      >
+        {currentSlide.isWelcome && (
+          <div style={{ animation: "fadeIn 0.4s ease" }}>
+            <div style={{ position: "relative", marginBottom: 36, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%) translateY(" + lanyardPipOffset.y + "px) scale(" + lanyardPipOffset.scale + ")",
+                opacity: lanyardPipOffset.opacity,
+                transition: lanyardPipTransition,
+                zIndex: 10,
+                pointerEvents: "none",
+              }}>
+                <div
+                  className="pip-sonar"
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    background: "rgba(74,155,130,0.15)",
+                    border: "1px solid rgba(74,155,130,0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    boxShadow: "0 0 24px rgba(74,155,130,0.4), 0 0 48px rgba(74,155,130,0.1)",
+                  }}
+                >
+                  <PipMark size={14} color={C.accent} glow pulse />
+                </div>
+              </div>
+              <LanyardLogo size={72} color={C.accent} />
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 700, color: C.text, letterSpacing: "-0.5px", marginBottom: 12 }}>
+              LANYARD
+            </div>
+            <div style={{ fontSize: 15, color: C.textSub, fontWeight: 300, letterSpacing: "0.04em", marginBottom: 32 }}>
+              Your conference. Fully loaded.
+            </div>
+            {!emerged && (
+              <div style={{ fontSize: 12, color: C.textMuted, animation: "fadeInOut 2s ease-in-out infinite" }}>
+                tap anywhere to begin
+              </div>
+            )}
+          </div>
+        )}
+
+        {!currentSlide.isWelcome && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20, animation: "fadeIn 0.4s ease", width: "100%" }}>
+            <div style={{ fontSize: 26, fontWeight: 600, color: C.text, lineHeight: 1.2, marginBottom: 4 }}>
+              {currentSlide.title}
+            </div>
+            {currentSlide.pipSpeech && (
+              <PipSpeech text={currentSlide.pipSpeech} />
+            )}
+            {currentSlide.features && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300 }}>
+                {currentSlide.features.map(function(item) {
+                  return (
+                    <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 12, background: C.bgCard, border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px", textAlign: "left" }}>
+                      <span style={{ fontSize: 18, flexShrink: 0 }}>{item.icon}</span>
+                      <span style={{ fontSize: 12, color: C.textSub, lineHeight: 1.4 }}>{item.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {currentSlide.isLast && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 300, marginTop: 8 }}>
+                <GreenBtn
+                  onClick={function() { setShowImport(true); }}
+                  style={{ width: "100%", padding: "12px", fontSize: 14, borderRadius: 24 }}
+                >
+                  Import my schedule with Pip
+                </GreenBtn>
+                <button
+                  onClick={props.onDone}
+                  style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif", padding: "8px" }}
+                >
+                  {"Skip — add manually"}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {emerged && (
+          <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 32, marginBottom: 20 }}>
+            {SLIDES.map(function(_, i) {
               return (
                 <div
                   key={i}
-                  style={{ width: i === step ? 24 : 6, height: 6, borderRadius: 3, background: i === step ? C.accent : C.bgPillActive, transition: "all 0.2s" }}
+                  style={{ width: i === step ? 24 : 6, height: 6, borderRadius: 3, background: i === step ? C.accent : C.bgPillActive, transition: "all 0.3s ease" }}
                 />
               );
             })}
           </div>
-          {step < totalSteps - 1 && step !== 3 && (
-            <GreenBtn onClick={function() { setStep(function(s) { return s + 1; }); }} style={{ width: "100%", padding: "13px", fontSize: 15, borderRadius: 24 }}>
+        )}
+
+        {showButton && !currentSlide.isLast && (
+          <div style={{ animation: "fadeIn 0.5s ease", marginTop: 8 }}>
+            <GreenBtn
+              onClick={handleNext}
+              style={{ padding: "13px 40px", fontSize: 15, borderRadius: 24 }}
+            >
               Continue
             </GreenBtn>
-          )}
-          {step > 0 && (
-            <button
-              onClick={function() { setStep(function(s) { return s - 1; }); }}
-              style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 13, fontFamily: "'DM Sans',sans-serif", display: "block", width: "100%", marginTop: 12, textAlign: "center" }}
+          </div>
+        )}
+
+        {showButton && currentSlide.isLast && (
+          <div style={{ animation: "fadeIn 0.5s ease", marginTop: 8 }}>
+            <GreenBtn
+              onClick={handleNext}
+              style={{ padding: "13px 40px", fontSize: 15, borderRadius: 24 }}
             >
-              Back
-            </button>
-          )}
-          {step === 0 && (
-            <button
-              onClick={props.onDone}
-              style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif", display: "block", width: "100%", marginTop: 12, textAlign: "center" }}
-            >
-              Skip intro
-            </button>
-          )}
-        </div>
+              {"Let's go"}
+            </GreenBtn>
+          </div>
+        )}
       </div>
-      <style>{".pip-pulse{animation:pipPulse 2s ease-in-out infinite}@keyframes pipPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(0.92)}}@keyframes pipRing{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:0.2;transform:translate(-50%,-50%) scale(1.15)}}"}</style>
+      <style>{".pip-pulse{animation:pipPulse 2s ease-in-out infinite}@keyframes pipPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(0.92)}}@keyframes pipRing{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:0.2;transform:translate(-50%,-50%) scale(1.15)}}@keyframes fadeInOut{0%,100%{opacity:0.3}50%{opacity:0.8}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}"}</style>
+    </div>
+  );
+}
+
+// ---- MESSAGING COMPONENTS ----
+
+function timeAgo(dateStr) {
+  var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (diff < 60) return "just now";
+  if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+  return Math.floor(diff / 86400) + "d ago";
+}
+
+function ChatThread(props) {
+  var myUid = getUserId();
+  var myName = props.myName;
+  var myColor = props.myColor;
+  var type = props.type;
+  var toUid = props.toUid || null;
+  var toName = props.toName || "Group";
+  const [msgs, setMsgs] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef(null);
+
+  function loadMsgs() {
+    sbLoadMessages(type, toUid, function(err, data) {
+      setMsgs(data || []);
+      setLoading(false);
+    });
+  }
+
+  useEffect(function() {
+    setLoading(true);
+    loadMsgs();
+    var t = setInterval(loadMsgs, 8000);
+    return function() { clearInterval(t); };
+  }, [type, toUid]);
+
+  useEffect(function() {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [msgs]);
+
+  function send() {
+    if (!input.trim() || sending) return;
+    setSending(true);
+    sbSendMessage({
+      fromName: myName,
+      fromColor: myColor,
+      toUid: toUid,
+      type: type,
+      content: input.trim(),
+    }, function() {
+      setSending(false);
+      setInput("");
+      loadMsgs();
+    });
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8, paddingBottom: 8 }}>
+        {loading && (
+          <div style={{ textAlign: "center", padding: "20px", color: C.textMuted, fontSize: 12 }}>
+            Loading...
+          </div>
+        )}
+        {!loading && msgs.length === 0 && (
+          <div style={{ textAlign: "center", padding: "30px 20px", color: C.textMuted, fontSize: 12 }}>
+            {type === "direct" ? "Start a conversation with " + toName : "No messages yet. Say something!"}
+          </div>
+        )}
+        {msgs.map(function(m) {
+          var isMe = m.from_uid === myUid;
+          return (
+            <div
+              key={m.id}
+              style={{ display: "flex", flexDirection: "column", alignItems: isMe ? "flex-end" : "flex-start" }}
+            >
+              {!isMe && (
+                <div style={{ fontSize: 10, color: m.from_color || C.textMuted, fontWeight: 600, marginBottom: 3, marginLeft: 4 }}>
+                  {m.from_name}
+                </div>
+              )}
+              <div style={{
+                maxWidth: "80%",
+                background: isMe ? C.accent : C.bgCardAlt,
+                color: "#fff",
+                padding: "9px 13px",
+                borderRadius: isMe ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                fontSize: 13,
+                lineHeight: 1.5,
+              }}>
+                {m.content}
+              </div>
+              <div style={{ fontSize: 9, color: C.textMuted, marginTop: 3, marginLeft: 4, marginRight: 4 }}>
+                {timeAgo(m.created_at)}
+              </div>
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
+      <div style={{ display: "flex", gap: 8, paddingTop: 10, borderTop: "1px solid " + C.border }}>
+        <input
+          value={input}
+          onChange={function(e) { setInput(e.target.value); }}
+          onKeyDown={function(e) { if (e.key === "Enter") send(); }}
+          placeholder={"Message " + toName + "..."}
+          style={Object.assign({}, inp, { flex: 1 })}
+        />
+        <GreenBtn onClick={send} disabled={sending || !input.trim()} style={{ padding: "9px 16px", fontSize: 13 }}>
+          Send
+        </GreenBtn>
+      </div>
+    </div>
+  );
+}
+
+function ShoutoutComposer(props) {
+  var myName = props.myName;
+  var myColor = props.myColor;
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+
+  function send() {
+    if (!input.trim() || sending) return;
+    setSending(true);
+    sbSendMessage({
+      fromName: myName,
+      fromColor: myColor,
+      toUid: null,
+      type: "shoutout",
+      content: input.trim(),
+    }, function() {
+      setSending(false);
+      setInput("");
+      if (props.onSent) props.onSent();
+    });
+  }
+
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <input
+        value={input}
+        onChange={function(e) { setInput(e.target.value); }}
+        onKeyDown={function(e) { if (e.key === "Enter") send(); }}
+        placeholder="Post a shoutout to the team..."
+        style={Object.assign({}, inp, { flex: 1 })}
+      />
+      <GreenBtn onClick={send} disabled={sending || !input.trim()} style={{ padding: "9px 14px", fontSize: 12 }}>
+        {sending ? "..." : "Post"}
+      </GreenBtn>
+    </div>
+  );
+}
+
+function TeamView(props) {
+  var myUid = getUserId();
+  var myName = props.myName;
+  var myColor = props.myColor;
+  const [tab, setTab] = useState("group");
+  const [shoutoutRefresh, setShoutoutRefresh] = useState(0);
+
+  var otherTeam = TEAM.filter(function(t) { return t.key !== props.myKey; });
+
+  var dmPartner = null;
+  if (tab === "kyle") {
+    dmPartner = TEAM.find(function(t) { return t.key === "K"; });
+  } else if (tab === "tony") {
+    dmPartner = TEAM.find(function(t) { return t.key === "T"; });
+  } else if (tab === "chris") {
+    dmPartner = TEAM.find(function(t) { return t.key === "C"; });
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, flexWrap: "wrap" }}>
+        <button
+          onClick={function() { setTab("group"); }}
+          style={{ padding: "7px 14px", borderRadius: 20, cursor: "pointer", fontSize: 11, fontWeight: 600, fontFamily: "'DM Sans',sans-serif", background: tab === "group" ? C.accent : C.bgDark, color: tab === "group" ? "#fff" : C.textSub, border: "1px solid " + (tab === "group" ? C.accent : C.border) }}
+        >
+          Group Chat
+        </button>
+        {TEAM.filter(function(t) { return t.key !== props.myKey; }).map(function(t) {
+          return (
+            <button
+              key={t.key}
+              onClick={function() { setTab(t.key === "K" ? "kyle" : t.key === "T" ? "tony" : "chris"); }}
+              style={{ padding: "7px 14px", borderRadius: 20, cursor: "pointer", fontSize: 11, fontWeight: 600, fontFamily: "'DM Sans',sans-serif", background: (tab === (t.key === "K" ? "kyle" : t.key === "T" ? "tony" : "chris")) ? t.color : C.bgDark, color: (tab === (t.key === "K" ? "kyle" : t.key === "T" ? "tony" : "chris")) ? "#fff" : C.textSub, border: "1px solid " + ((tab === (t.key === "K" ? "kyle" : t.key === "T" ? "tony" : "chris")) ? t.color : C.border) }}
+            >
+              {t.name.split(" ")[0]}
+            </button>
+          );
+        })}
+        <button
+          onClick={function() { setTab("shoutouts"); }}
+          style={{ padding: "7px 14px", borderRadius: 20, cursor: "pointer", fontSize: 11, fontWeight: 600, fontFamily: "'DM Sans',sans-serif", background: tab === "shoutouts" ? C.yellow : C.bgDark, color: tab === "shoutouts" ? "#000" : C.textSub, border: "1px solid " + (tab === "shoutouts" ? C.yellow : C.border) }}
+        >
+          Shoutouts
+        </button>
+      </div>
+
+      {tab === "group" && (
+        <ChatThread
+          key="group"
+          type="group"
+          toUid={null}
+          toName="everyone"
+          myName={myName}
+          myColor={myColor}
+        />
+      )}
+
+      {(tab === "kyle" || tab === "tony" || tab === "chris") && dmPartner && (
+        <ChatThread
+          key={tab}
+          type="direct"
+          toUid={dmPartner.key}
+          toName={dmPartner.name.split(" ")[0]}
+          myName={myName}
+          myColor={myColor}
+        />
+      )}
+
+      {tab === "shoutouts" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <ShoutoutComposer
+            myName={myName}
+            myColor={myColor}
+            onSent={function() { setShoutoutRefresh(function(n) { return n + 1; }); }}
+          />
+          <ShoutoutFeed key={shoutoutRefresh} compact={false} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ShoutoutFeed(props) {
+  var compact = props.compact;
+  const [shoutouts, setShoutouts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  function load() {
+    sbLoadMessages("shoutout", null, function(err, data) {
+      setShoutouts(data || []);
+      setLoading(false);
+    });
+  }
+
+  useEffect(function() {
+    load();
+    var t = setInterval(load, 15000);
+    return function() { clearInterval(t); };
+  }, []);
+
+  if (loading) {
+    return <div style={{ fontSize: 11, color: C.textMuted }}>Loading...</div>;
+  }
+
+  if (shoutouts.length === 0) {
+    return <div style={{ fontSize: 11, color: C.textMuted, fontStyle: "italic" }}>No shoutouts yet</div>;
+  }
+
+  var display = compact ? shoutouts.slice(0, 3) : shoutouts;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {display.map(function(s) {
+        return (
+          <div
+            key={s.id}
+            style={{ background: C.bgDark, border: "1px solid " + C.border, borderLeft: "3px solid " + (s.from_color || C.accent), borderRadius: 10, padding: "10px 13px" }}
+          >
+            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.5, marginBottom: 5 }}>
+              {s.content}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 10, color: s.from_color || C.accent, fontWeight: 600 }}>{s.from_name}</span>
+              <span style={{ fontSize: 10, color: C.textMuted }}>{timeAgo(s.created_at)}</span>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -2352,6 +3034,7 @@ function HomeView(props) {
           )}
         </div>
       </Card>
+
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
         {[
           { l: "Meetings", v: sessions.filter(function(s) { return s.track === "Partner Meeting"; }).length, c: C.accentOrange },
@@ -2367,6 +3050,7 @@ function HomeView(props) {
           );
         })}
       </div>
+
       <div
         onClick={props.onPipDay}
         style={{ background: "linear-gradient(135deg,rgba(74,155,130,0.12),rgba(45,107,90,0.08))", border: "1px solid rgba(74,155,130,0.25)", borderRadius: 12, padding: "14px 16px", marginBottom: 10, cursor: "pointer" }}
@@ -2387,36 +3071,59 @@ function HomeView(props) {
           <div style={{ fontSize: 13, color: C.textMuted }}>{">"}</div>
         </div>
       </div>
+
       <div style={{ display: "flex", gap: 7, marginBottom: 10 }}>
         <button onClick={props.onBriefing}  style={Object.assign({}, btnBase, { flex: 1, background: C.bgCard, color: C.textSub, border: "1px solid " + C.border, fontSize: 11, padding: "9px 8px" })}>Daily Brief</button>
         <button onClick={props.onDebrief}   style={Object.assign({}, btnBase, { flex: 1, background: C.bgCard, color: C.textSub, border: "1px solid " + C.border, fontSize: 11, padding: "9px 8px" })}>Debrief</button>
         <button onClick={props.onRelHealth} style={Object.assign({}, btnBase, { flex: 1, background: C.bgCard, color: C.textSub, border: "1px solid " + C.border, fontSize: 11, padding: "9px 8px" })}>Health</button>
       </div>
-      <Card style={{ padding: "12px 16px", marginBottom: 10, cursor: "pointer", background: props.quickNote ? C.bgCardAlt : C.bgCard }} onClick={props.onQuickNote}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ fontSize: 18 }}>{"📝"}</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: C.text }}>Quick Notes</div>
-            <div style={{ fontSize: 11, color: C.textMuted, marginTop: 1 }}>
-              {props.quickNote ? props.quickNote.slice(0, 40) + (props.quickNote.length > 40 ? "..." : "") : "Tap to jot something down"}
-            </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+        <Card
+          style={{ padding: "12px 14px", cursor: "pointer", background: props.quickNote ? C.bgCardAlt : C.bgCard, minHeight: 90 }}
+          onClick={props.onQuickNote}
+        >
+          <div style={{ fontSize: 10, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Notes</div>
+          <div style={{ fontSize: 11, color: C.textSub, lineHeight: 1.5 }}>
+            {props.quickNote ? props.quickNote.slice(0, 60) + (props.quickNote.length > 60 ? "..." : "") : "Tap to jot something down"}
           </div>
-          <div style={{ fontSize: 13, color: C.textMuted }}>{">"}</div>
-        </div>
-      </Card>
+        </Card>
+        <Card
+          style={{ padding: "12px 14px", cursor: "pointer", background: C.bgCard, minHeight: 90 }}
+          onClick={props.onMessages}
+        >
+          <div style={{ fontSize: 10, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Team</div>
+          {props.latestShoutout ? (
+            <div>
+              <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5, marginBottom: 4 }}>
+                {props.latestShoutout.content.slice(0, 55) + (props.latestShoutout.content.length > 55 ? "..." : "")}
+              </div>
+              <div style={{ fontSize: 9, color: props.latestShoutout.from_color || C.accent, fontWeight: 600 }}>
+                {props.latestShoutout.from_name}
+              </div>
+            </div>
+          ) : (
+            <div style={{ fontSize: 11, color: C.textMuted }}>No shoutouts yet</div>
+          )}
+        </Card>
+      </div>
+
       <Card style={{ padding: "13px 15px", marginBottom: 10 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 10, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 5 }}>Conference Hotel</div>
-            <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 3 }}>{hotel.name}</div>
+            <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 3 }}>{hotel.name || "Not set"}</div>
             <div style={{ fontSize: 11, color: C.textSub, lineHeight: 1.6 }}>
-              {hotel.address}<br />{hotel.phone}<br />{"Check-in: " + hotel.checkIn}
+              {hotel.address && <span>{hotel.address}<br /></span>}
+              {hotel.phone && <span>{hotel.phone}<br /></span>}
+              {hotel.checkIn && <span>{"Check-in: " + hotel.checkIn}</span>}
               {hotel.roomNumber && <span><br />{"Room: " + hotel.roomNumber}</span>}
             </div>
           </div>
           <button onClick={props.onHotel} style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 13, padding: "2px 6px" }}>edit</button>
         </div>
       </Card>
+
       <div style={{ fontSize: 10, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Partner Health</div>
       {partners.length === 0 ? (
         <EmptyState title="No partners yet" body="Add partner profiles to track relationships." />
@@ -2424,7 +3131,7 @@ function HomeView(props) {
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {partners.map(function(p) {
             return (
-              <Card key={p.id} accent={STATUS_COLORS[p.status]} style={{ padding: "10px 14px", display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }} onClick={function() { props.onSelectP(p); }}>
+              <Card key={p.id} accent={STATUS_COLORS[p.status]} style={{ padding: "10px 14px", display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }} className={p.status === "red" ? "card-glow-red status-pulse-red" : p.status === "green" ? "card-glow-green" : "card-glow-yellow"} onClick={function() { props.onSelectP(p); }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 500, color: C.text }}>{p.name}</div>
                   <div style={{ fontSize: 10, color: C.textMuted, marginTop: 1 }}>{p.revenue + " | " + (p.scheduledMeeting || "Not scheduled")}</div>
@@ -2436,6 +3143,7 @@ function HomeView(props) {
           })}
         </div>
       )}
+
       <button
         onClick={props.onExport}
         style={{ width: "100%", marginTop: 16, background: C.bgDark, color: C.textSub, border: "1px solid " + C.border, borderRadius: 24, padding: "11px", cursor: "pointer", fontSize: 12, fontWeight: 600, fontFamily: "'DM Sans',sans-serif" }}
@@ -2585,57 +3293,6 @@ function ScheduleView(props) {
   );
 }
 
-function TeamView(props) {
-  var di = props.sessions.filter(function(s) { return s.day === props.day && !s.isChild; });
-  return (
-    <div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
-        {TEAM.map(function(t) {
-          return (
-            <Card key={t.key} style={{ padding: "10px 14px", display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: t.color, flexShrink: 0 }} />
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 500, color: C.text }}>{t.name}</div>
-                <div style={{ fontSize: 10, color: C.textMuted }}>{t.title}</div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      {di.length === 0 ? (
-        <EmptyState title="No events this day" body="Check another day." />
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {di.map(function(s) {
-            return (
-              <Card key={s.id} style={{ padding: "10px 14px", display: "flex", gap: 12, alignItems: "center" }}>
-                <div style={{ minWidth: 60, textAlign: "right", flexShrink: 0 }}>
-                  <div style={{ fontSize: 11, color: C.textSub }}>{s.time || "--"}</div>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500, color: C.text, marginBottom: 4, lineHeight: 1.3 }}>
-                    {s.track === "Open Slot" ? <em style={{ color: C.textMuted }}>Open Slot</em> : s.title}
-                  </div>
-                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                    {TEAM.filter(function(t) { return s.attendees && s.attendees.includes(t.key); }).map(function(t) {
-                      return (
-                        <span key={t.key} style={{ background: "rgba(" + toRgb(t.color) + ",0.12)", color: t.color, fontSize: 9, fontWeight: 600, padding: "2px 7px", borderRadius: 20 }}>
-                          {t.name}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-                <Pill color={TRACK_COLORS[s.track] || C.accent}>{s.track}</Pill>
-              </Card>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function PartnersView(props) {
   var partners = props.partners;
   return (
@@ -2742,6 +3399,106 @@ function PendingView(props) {
     </div>
   );
 }
+// ---- FLOATING PIP COMPANION ----
+function FloatingPip(props) {
+  var view = props.view;
+  var hasAlert = props.hasAlert;
+  var ANCHOR_BOTTOM = 140;
+  var ANCHOR_RIGHT = 24;
+
+  // phase: idle | flyout | snap | floatin
+  const [phase, setPhase] = useState("idle");
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(1);
+  const prevView = useRef(view);
+
+  useEffect(function() {
+    if (prevView.current === view) return;
+    prevView.current = view;
+
+    // Phase 1: zip out to the right
+    setPhase("flyout");
+    setOffset({ x: window.innerWidth + 80, y: 0 });
+    setOpacity(0);
+
+    // Phase 2: snap to above the screen invisibly
+    var t1 = setTimeout(function() {
+      setPhase("snap");
+      setOffset({ x: 0, y: -(window.innerHeight + 80) });
+      setOpacity(0);
+
+      // Phase 3: glide down from top into position
+      var t2 = setTimeout(function() {
+        setPhase("floatin");
+        setOffset({ x: 0, y: 0 });
+        setOpacity(1);
+      }, 60);
+    }, 320);
+
+    return function() { clearTimeout(t1); };
+  }, [view]);
+
+  var transition = "none";
+  if (phase === "flyout") {
+    transition = "transform 0.28s cubic-bezier(0.55,0,1,0.45), opacity 0.2s ease";
+  } else if (phase === "floatin") {
+    transition = "transform 1.1s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease";
+  }
+
+  return (
+    <div
+      onClick={props.onClick}
+      style={{
+        position: "fixed",
+        bottom: ANCHOR_BOTTOM,
+        right: ANCHOR_RIGHT,
+        opacity: opacity,
+        transform: "translate(" + offset.x + "px, " + offset.y + "px)",
+        transition: transition,
+        zIndex: 90,
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        className="pip-sonar"
+        style={{
+          width: 52,
+          height: 52,
+          borderRadius: "50%",
+          background: "rgba(74,155,130,0.15)",
+          border: "1px solid rgba(74,155,130," + (hasAlert ? "0.8" : "0.35") + ")",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          boxShadow: hasAlert
+            ? "0 0 24px rgba(74,155,130,0.6), 0 0 48px rgba(74,155,130,0.2)"
+            : "0 0 16px rgba(74,155,130,0.25)",
+          transition: "box-shadow 0.3s ease, border-color 0.3s ease",
+        }}>
+        <div style={{ position: "relative" }}>
+          <PipMark size={16} color={C.accent} glow pulse />
+          {hasAlert && (
+            <div style={{
+              position: "absolute",
+              top: -2,
+              right: -2,
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: C.red,
+              border: "1.5px solid " + C.bg,
+            }} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function NotificationsModal(props) {
   const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -2792,7 +3549,7 @@ function NotificationsModal(props) {
     </Modal>
   );
 }
-// ---- MAIN APP (BLANK VERSION) ----
+// ---- MAIN APP ----
 export default function Lanyard() {
   const inviteParams = useMemo(function() { return getInviteParams(); }, []);
   const [inviteDone, setInviteDone] = useState(function() {
@@ -2811,7 +3568,7 @@ export default function Lanyard() {
     try { return localStorage.getItem("lanyard_custom_title") || ""; } catch (e) { return ""; }
   });
   const [view, setView] = useState("home");
-  const [day, setDay] = useState("mon");
+  const [day, setDay] = useState(getCurrentDayKey);
   const [sessions, setSess] = useState(function() {
     var s = loadLocal();
     return s ? s.sessions : INIT_SESSIONS;
@@ -2829,6 +3586,7 @@ export default function Lanyard() {
     return s ? (s.quickNote || "") : "";
   });
   const [weather, setWeather] = useState(null);
+  const [latestShoutout, setLatestShoutout] = useState(null);
   const [selS, setSelS] = useState(null);
   const [editS, setEditS] = useState(null);
   const [selP, setSelP] = useState(null);
@@ -2857,9 +3615,23 @@ export default function Lanyard() {
   const [srchQ, setSrchQ] = useState("");
   const [now, setNow] = useState(function() { return new Date(); });
   const [alertMsg, setAlertMsg] = useState(null);
-  const [conferenceName, setConferenceName] = useState(function() {
-    try { return localStorage.getItem("lanyard_conf_name") || "My Conference"; } catch (e) { return "My Conference"; }
-  });
+
+  var myTeamMember = useMemo(function() {
+    var uid = getUserId();
+    var saved = null;
+    try { saved = localStorage.getItem("lanyard_team_key"); } catch (e) {}
+    if (saved) return TEAM.find(function(t) { return t.key === saved; }) || TEAM[0];
+    if (inviteParams && inviteParams.invite === "kyle") return TEAM.find(function(t) { return t.key === "K"; }) || TEAM[0];
+    if (inviteParams && inviteParams.invite === "tony") return TEAM.find(function(t) { return t.key === "T"; }) || TEAM[0];
+    return TEAM[0];
+  }, [inviteParams]);
+
+  useEffect(function() {
+    if (inviteParams) {
+      var key = inviteParams.invite === "kyle" ? "K" : inviteParams.invite === "tony" ? "T" : "C";
+      try { localStorage.setItem("lanyard_team_key", key); } catch (e) {}
+    }
+  }, []);
 
   useEffect(function() {
     sbLoad(function(data) {
@@ -2894,6 +3666,60 @@ export default function Lanyard() {
   }, []);
 
   useEffect(function() {
+    var confDay = getConferenceDayKey(now);
+    if (!confDay) return;
+    var nowMins = now.getHours() * 60 + now.getMinutes();
+    setSess(function(prev) {
+      return prev.map(function(s) {
+        if (!s.time || s.isChild || s.day !== confDay) return s;
+        var start = parseTime(s.time);
+        var end = s.end ? parseTime(s.end) : start + 60;
+        var status = nowMins >= start && nowMins < end ? "in-progress" : nowMins >= end ? "complete" : "upcoming";
+        return status !== s.status ? Object.assign({}, s, { status: status }) : s;
+      });
+    });
+  }, [now]);
+
+  useEffect(function() {
+    var confDay = getConferenceDayKey(now);
+    if (!confDay) return;
+    var nowMins = now.getHours() * 60 + now.getMinutes();
+    var upcoming = sessions.filter(function(x) {
+      return !x.isChild && x.time && x.status === "upcoming" && x.day === confDay;
+    });
+    for (var i = 0; i < upcoming.length; i++) {
+      var diff = parseTime(upcoming[i].time) - nowMins;
+      if (diff === 10) { setAlertMsg(upcoming[i].title + " starts in 10 minutes"); break; }
+      if (diff === 5)  { setAlertMsg(upcoming[i].title + " starts in 5 minutes");  break; }
+    }
+  }, [now, sessions]);
+
+  useEffect(function() {
+    if (alertMsg) {
+      var t = setTimeout(function() { setAlertMsg(null); }, 6000);
+      return function() { clearTimeout(t); };
+    }
+  }, [alertMsg]);
+
+  useEffect(function() {
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=33.7175&longitude=-116.3422&current=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1")
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d && d.current) setWeather({ temp: Math.round(d.current.temperature_2m), code: d.current.weathercode });
+      })
+      .catch(function() {});
+  }, []);
+
+  useEffect(function() {
+    setSess(function(prev) {
+      var withSlots = autoGenerateOpenSlots(prev);
+      var prevAuto = prev.filter(function(s) { return typeof s.id === "string" && s.id.indexOf("auto_") === 0; }).length;
+      var newAuto = withSlots.filter(function(s) { return typeof s.id === "string" && s.id.indexOf("auto_") === 0; }).length;
+      return prevAuto !== newAuto ? withSlots : prev;
+    });
+  }, [sessions.filter(function(s) { return s.track !== "Open Slot"; }).length]);
+
+  useEffect(function() {
     function pollNotifs() {
       sbLoadNotifications(function(err, data) {
         if (!data || data.length === 0) return;
@@ -2908,6 +3734,17 @@ export default function Lanyard() {
     var t = setInterval(pollNotifs, 30000);
     return function() { clearInterval(t); };
   }, [lastSeenNotif]);
+
+  useEffect(function() {
+    function loadShoutout() {
+      sbLoadMessages("shoutout", null, function(err, data) {
+        if (data && data.length > 0) setLatestShoutout(data[0]);
+      });
+    }
+    loadShoutout();
+    var t = setInterval(loadShoutout, 15000);
+    return function() { clearInterval(t); };
+  }, []);
 
   function notify(msg) { setToast(msg); setTimeout(function() { setToast(null); }, 2800); }
 
@@ -2942,7 +3779,7 @@ export default function Lanyard() {
   function addEvent(f) {
     if (!f.title || !f.time) return;
     var s = Object.assign({}, f, {
-      id: Date.now(), track: f.type, attendees: ["A","B","C"],
+      id: Date.now(), track: f.type, attendees: ["C","K","T"],
       isParent: false, isChild: false, status: "upcoming", partnerId: f.partnerId || null,
     });
     setSess(function(p) { return p.concat([s]); });
@@ -2968,7 +3805,7 @@ export default function Lanyard() {
         day: s.day && s.day.toString().includes("1") ? "mon" : s.day && s.day.toString().includes("2") ? "tue" : s.day && s.day.toString().includes("3") ? "wed" : "thu",
         time: s.time || "9:00 AM", end: s.end || "",
         title: s.title || "Untitled", location: s.location || "",
-        track: s.track || "Conference", attendees: ["A","B","C"],
+        track: s.track || "Conference", attendees: ["C","K","T"],
         notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false,
       };
     });
@@ -3005,7 +3842,7 @@ export default function Lanyard() {
   }, [partners]);
 
   const openSlots = sessions.filter(function(s) { return s.track === "Open Slot"; });
-  const showDayTabs = view === "schedule" || view === "team";
+  const showDayTabs = view === "schedule";
 
   const srchRes = useMemo(function() {
     if (!srchQ.trim()) return { s: [], p: [] };
@@ -3064,7 +3901,7 @@ export default function Lanyard() {
                   <div style={{ fontSize: 17, fontWeight: 500, color: C.text, letterSpacing: "0.02em" }}>Lanyard</div>
                   <PipMark size={7} color={C.accent} opacity={0.5} />
                 </div>
-                <div style={{ fontSize: 9, color: C.textMuted, letterSpacing: "0.1em" }}>{roleLabel.toUpperCase()}</div>
+                <div style={{ fontSize: 9, color: C.textMuted, letterSpacing: "0.1em" }}>{"ABPA 2026 | " + roleLabel.toUpperCase()}</div>
               </div>
             </div>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -3157,10 +3994,10 @@ export default function Lanyard() {
         </div>
       )}
 
-      <div style={{ padding: "16px 18px 100px", maxWidth: 480, margin: "0 auto" }}>
-        {view === "home"     && <HomeView sessions={sessions} partners={partners} now={now} hotel={hotel} weather={weather} onSelectP={function(p) { setSelP(p); }} onHotel={function() { setHotelM(true); }} onExport={function() { setExport(true); }} quickNote={quickNote} onQuickNote={function() { setShowQN(true); }} onPipDay={function() { setPipDay(true); }} onBriefing={function() { setBriefing(true); }} onDebrief={function() { setDebrief(true); }} onRelHealth={function() { setRelHealth(true); }} />}
+      <div key={view} className="tab-slide-in" style={{ padding: "16px 18px 100px", maxWidth: 480, margin: "0 auto" }}>
+        {view === "home"     && <HomeView sessions={sessions} partners={partners} now={now} hotel={hotel} weather={weather} onSelectP={function(p) { setSelP(p); }} onHotel={function() { setHotelM(true); }} onExport={function() { setExport(true); }} quickNote={quickNote} onQuickNote={function() { setShowQN(true); }} onPipDay={function() { setPipDay(true); }} onBriefing={function() { setBriefing(true); }} onDebrief={function() { setDebrief(true); }} onRelHealth={function() { setRelHealth(true); }} onMessages={function() { setView("team"); }} latestShoutout={latestShoutout} />}
         {view === "schedule" && <ScheduleView sessions={sessions} day={day} onSelectS={function(s) { setSelS(s); }} onSelectV={function(v) { setVM(v); }} conflicts={conflicts} />}
-        {view === "team"     && <TeamView sessions={sessions} day={day} />}
+        {view === "team"     && <TeamView myKey={myTeamMember.key} myName={myTeamMember.name.split(" ")[0]} myColor={myTeamMember.color} />}
         {view === "partners" && <PartnersView partners={partners} onSelect={function(p) { setSelP(p); }} onSchedule={function(p) { setSchedP(p); setSelP(null); }} onEdit={function(p) { setEditP(Object.assign({}, p)); }} onAdd={function() { setAddP(true); }} />}
         {view === "pending"  && <PendingView partners={partners} sessions={sessions} onSchedule={function(p) { setSchedP(p); }} />}
       </div>
@@ -3178,12 +4015,13 @@ export default function Lanyard() {
         </div>
       </div>
 
-      <button
-        onClick={function() { setPipChat(true); }}
-        style={{ position: "fixed", bottom: 80, right: 20, width: 52, height: 52, borderRadius: "50%", background: "rgba(74,155,130,0.18)", border: "1px solid rgba(74,155,130,0.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 0 20px rgba(74,155,130,0.2)", zIndex: 90 }}
-      >
-        <PipMark size={14} color={C.accent} glow pulse />
-      </button>
+      <div style={{ position: "fixed", bottom: 80, right: 20, zIndex: 90 }}>
+        <FloatingPip
+          view={view}
+          hasAlert={unreadCount > 0}
+          onClick={function() { setPipChat(true); }}
+        />
+      </div>
 
       {selS && !editS && <MeetingModal session={selS} pMap={pMap} hasConflict={conflicts.has(selS.id)} onClose={function() { setSelS(null); }} onUpdateS={updateS} onUpdateP={updateP} onEdit={function(s) { setEditS(Object.assign({}, s)); }} role={role} customTitle={customTitle} />}
       {editS && <EditSessionModal session={editS} onClose={function() { setEditS(null); }} onSave={saveEditS} />}
@@ -3210,9 +4048,108 @@ export default function Lanyard() {
         select option { background: #142420; color: #E8F0EE; }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-thumb { background: #2D5A4F; border-radius: 4px; }
+
         .pip-pulse { animation: pipPulse 2s ease-in-out infinite; }
-        @keyframes pipPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(0.92)} }
-        @keyframes pipRing { 0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)} 50%{opacity:0.2;transform:translate(-50%,-50%) scale(1.15)} }
+        @keyframes pipPulse {
+          0%,100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(0.92); }
+        }
+        @keyframes pipRing {
+          0%,100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+          50% { opacity: 0.2; transform: translate(-50%,-50%) scale(1.15); }
+        }
+
+
+        .pip-sonar::before, .pip-sonar::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          border: 1px solid rgba(74,155,130,0.4);
+          transform: translate(-50%, -50%) scale(1);
+          animation: sonarRing 3s ease-out infinite;
+          pointer-events: none;
+          z-index: -1;
+        }
+        .pip-sonar::after {
+          animation-delay: 1.5s;
+        }
+        @keyframes sonarRing {
+          0% { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
+          100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0; }
+        }
+
+        .card-glow-red {
+          box-shadow: 0 0 20px rgba(248,113,113,0.12);
+          border-color: rgba(248,113,113,0.3) !important;
+        }
+        .card-glow-green {
+          box-shadow: 0 0 16px rgba(74,155,130,0.1);
+        }
+        .card-glow-yellow {
+          box-shadow: 0 0 16px rgba(251,191,36,0.1);
+        }
+
+        .status-pulse-red {
+          animation: statusPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes statusPulse {
+          0%,100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.3); }
+          50% { box-shadow: 0 0 0 6px rgba(248,113,113,0); }
+        }
+
+        .tab-slide-in {
+          animation: tabSlideIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes tabSlideIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+          animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .pip-glow-btn {
+          position: relative;
+        }
+        .pip-glow-btn::before {
+          content: '';
+          position: absolute;
+          top: 50%; left: 50%;
+          width: 100%; height: 100%;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(74,155,130,0.3) 0%, transparent 70%);
+          transform: translate(-50%,-50%) scale(1.5);
+          animation: pipGlow 3s ease-in-out infinite;
+          pointer-events: none;
+        }
+        @keyframes pipGlow {
+          0%,100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1.5); }
+          50% { opacity: 0.2; transform: translate(-50%,-50%) scale(2); }
+        }
+
+        .major-badge {
+          background: linear-gradient(135deg, rgba(103,232,249,0.2), rgba(103,232,249,0.08)) !important;
+          border-color: rgba(103,232,249,0.4) !important;
+        }
+        .growth-badge {
+          background: rgba(74,222,128,0.1) !important;
+        }
+
+        .revenue-highlight {
+          background: linear-gradient(135deg, #4A9B82, #67E8F9);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
       `}</style>
     </div>
   );
