@@ -1,3 +1,7 @@
 {
-  "framework": "vite"
+  "functions": {
+    "api/pip.js": {
+      "runtime": "edge"
+    }
+  }
 }
