@@ -11,8 +11,7 @@ const C = {
 const SUPABASE_URL = "https://yrpdjmyfidhxlpmxasao.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycGRqbXlmaWRoeGxwbXhhc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg3NDQsImV4cCI6MjA5NDU1NDc0NH0.tutTq1raFxA3HKUWsfYsUJtCZeQfswc3tFh7sqUM2RA";
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
-const AK = ["sk-ant-api03-","T2pRP9UGGw9P467NyS4UjasPFdVB2S7HKqwnWW3avo-pI2SEtfQE_slNxSLgWZetCEBieCSyFw3ee2-_GRo8og-2OWGFQAA"].join("");
-const DATA_VERSION = "6";
+const AK = ["sk-ant-api03-","rEclH0o0BGdtiHkzmMwLjQpcOn_eyN3tYFX3VByNt76HRchfwDjSsqlIYNZ7DnmizoFd0p3oESd9CB8IlsSgOg-230NNgAA"].join("");
 const TEAM_ID = "abpa2026_team";
 
 const DAYS = [
