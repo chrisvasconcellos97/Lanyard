@@ -165,6 +165,16 @@ const INIT_PARTNERS = [
       { id: "a21", name: "Jay Kurzman",    title: "President",                    poc: false, notes: "Executive sponsor" },
     ],
   },
+  {
+    id: "p10", name: "XL / TPH", revenue: "", tier: "Mid", status: "green",
+    objective: "Conference check-in and relationship building.",
+    scheduledMeeting: "5/20 3:00 PM", unscheduled: false, rating: 0, pastNotes: "",
+    openItems: [],
+    attendees: [
+      { id: "a22", name: "Delvis Rodriguez", title: "", poc: true,  notes: "Primary contact" },
+      { id: "a23", name: "Michael Krause",   title: "", poc: false, notes: "" },
+    ],
+  },
 ];
 
 const INIT_SESSIONS = [
@@ -185,7 +195,7 @@ const INIT_SESSIONS = [
   { id: 15, day: "wed", time: "9:00 AM",  end: "10:30 AM", title: "Parts Authority Breakfast",  location: "Grapefruit Basil",         track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p5", isParent: false, isChild: false },
   { id: 16, day: "wed", time: "11:30 AM", end: "12:00 PM", title: "Board Candidates Intro",     location: "Grand Ballroom",           track: "Conference",      attendees: ["C","K","T"], notes: "Joseph Tsai introduction", status: "upcoming", partnerId: null, isParent: false, isChild: false },
   { id: 17, day: "wed", time: "1:00 PM",  end: "2:30 PM",  title: "All Star Auto Parts Lunch",  location: "Tommy Bahama Restaurant",  track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p4", isParent: false, isChild: false },
-  { id: 18, day: "wed", time: "3:00 PM",  end: "3:30 PM",  title: "XL / TPH Meeting",           location: "Lobby",                    track: "Partner Meeting", attendees: ["C","K","T"], notes: "Delvis Rodriguez - Michael Krause", status: "upcoming", partnerId: null, isParent: false, isChild: false },
+  { id: 18, day: "wed", time: "3:00 PM",  end: "3:30 PM",  title: "XL / TPH Meeting",           location: "Lobby",                    track: "Partner Meeting", attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: "p10", isParent: false, isChild: false },
   { id: 19, day: "wed", time: "5:00 PM",  end: "6:00 PM",  title: "NABC Vehicle Giveaway",      location: "Side Parking Lot",         track: "Conference",      attendees: ["C","K","T"], notes: "", status: "upcoming", partnerId: null, isParent: false, isChild: false },
   { id: 20, day: "wed", time: "7:00 PM",  end: "10:00 PM", title: "Offsite Dinner",             location: "TBD",                      track: "Meal/Reception",  attendees: ["C","K","T"], notes: "Shots in the Night", status: "upcoming", partnerId: null, isParent: false, isChild: false },
   { id: 21, day: "thu", time: "",         end: "",         title: "Travel Day",                 location: "",                         track: "Logistics",       attendees: ["C","K","T"], notes: "Safe travels!", status: "upcoming", partnerId: null, isParent: false, isChild: false },
@@ -396,16 +406,14 @@ function sbSave(sessions, partners, hotel, quickNote) {
     delete shared.rating;
     return { id: String(s.id) + "_shared", user_id: TEAM_ID, data: shared };
   });
-  fetch(SUPABASE_URL + "/rest/v1/sessions?user_id=eq." + TEAM_ID, { method: "DELETE", headers: sbH() })
-    .then(function() {
-      if (sharedSessions.length > 0) {
-        fetch(SUPABASE_URL + "/rest/v1/sessions", {
-          method: "POST",
-          headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
-          body: JSON.stringify(sharedSessions),
-        });
-      }
+  // Use upsert instead of delete+insert to avoid race condition 500 errors
+  if (sharedSessions.length > 0) {
+    fetch(SUPABASE_URL + "/rest/v1/sessions", {
+      method: "POST",
+      headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
+      body: JSON.stringify(sharedSessions),
     }).catch(function() {});
+  }
   var personalNotes = {};
   sessions.forEach(function(s) {
     var n = {};
@@ -421,19 +429,16 @@ function sbSave(sessions, partners, hotel, quickNote) {
     headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
     body: JSON.stringify({ user_id: uid + "_notes", hotel: personalNotes, quick_note: "" }),
   }).catch(function() {});
-  fetch(SUPABASE_URL + "/rest/v1/partners?user_id=eq." + TEAM_ID, { method: "DELETE", headers: sbH() })
-    .then(function() {
-      if (partners.length > 0) {
-        var rows = partners.map(function(p) {
-          return { id: String(p.id) + "_shared", user_id: TEAM_ID, data: p };
-        });
-        fetch(SUPABASE_URL + "/rest/v1/partners", {
-          method: "POST",
-          headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
-          body: JSON.stringify(rows),
-        });
-      }
+  if (partners.length > 0) {
+    var rows = partners.map(function(p) {
+      return { id: String(p.id) + "_shared", user_id: TEAM_ID, data: p };
+    });
+    fetch(SUPABASE_URL + "/rest/v1/partners", {
+      method: "POST",
+      headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
+      body: JSON.stringify(rows),
     }).catch(function() {});
+  }
   fetch(SUPABASE_URL + "/rest/v1/user_prefs", {
     method: "POST",
     headers: Object.assign({}, sbH(), { Prefer: "resolution=merge-duplicates" }),
@@ -541,7 +546,7 @@ function getRoleCtx(role, customTitle) {
 function askPip(prompt, role, customTitle, ctx, cb) {
   var sys = getRoleCtx(role, customTitle);
   var userContent = ctx ? ctx + "\n\n" + prompt : prompt;
-  fetch("https://api.anthropic.com/v1/messages", {
+  fetch("/api/pip", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -1363,6 +1368,86 @@ function EditPartnerModal(props) {
             + Add Item
           </button>
         </div>
+        <div>
+          <FL>Contacts</FL>
+          {d.attendees.map(function(a, i) {
+            return (
+              <div key={a.id} style={{ background: C.bgDark, border: "1px solid " + C.border, borderRadius: 8, padding: "10px 12px", marginBottom: 8 }}>
+                <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+                  <input
+                    value={a.name || ""}
+                    onChange={function(e) {
+                      setD(function(p) {
+                        return Object.assign({}, p, {
+                          attendees: p.attendees.map(function(x) {
+                            return x.id === a.id ? Object.assign({}, x, { name: e.target.value }) : x;
+                          }),
+                        });
+                      });
+                    }}
+                    placeholder="Name"
+                    style={Object.assign({}, inp, { flex: 1 })}
+                  />
+                  <button
+                    onClick={function() {
+                      setD(function(p) {
+                        return Object.assign({}, p, {
+                          attendees: p.attendees.filter(function(x) { return x.id !== a.id; }),
+                        });
+                      });
+                    }}
+                    style={{ background: "rgba(248,113,113,0.1)", color: C.red, border: "none", borderRadius: 6, padding: "6px 10px", cursor: "pointer", fontSize: 13 }}
+                  >
+                    x
+                  </button>
+                </div>
+                <input
+                  value={a.title || ""}
+                  onChange={function(e) {
+                    setD(function(p) {
+                      return Object.assign({}, p, {
+                        attendees: p.attendees.map(function(x) {
+                          return x.id === a.id ? Object.assign({}, x, { title: e.target.value }) : x;
+                        }),
+                      });
+                    });
+                  }}
+                  placeholder="Title"
+                  style={Object.assign({}, inp, { marginBottom: 6 })}
+                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <input
+                    type="checkbox"
+                    checked={!!a.poc}
+                    onChange={function() {
+                      setD(function(p) {
+                        return Object.assign({}, p, {
+                          attendees: p.attendees.map(function(x) {
+                            return x.id === a.id ? Object.assign({}, x, { poc: !x.poc }) : x;
+                          }),
+                        });
+                      });
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+                  <span style={{ fontSize: 11, color: C.textMuted }}>Primary contact (POC)</span>
+                </div>
+              </div>
+            );
+          })}
+          <button
+            onClick={function() {
+              setD(function(p) {
+                return Object.assign({}, p, {
+                  attendees: p.attendees.concat([{ id: "a" + Date.now(), name: "", title: "", poc: p.attendees.length === 0, notes: "" }]),
+                });
+              });
+            }}
+            style={{ background: C.bgDark, color: C.textMuted, border: "1px dashed " + C.border, borderRadius: 20, padding: "7px 14px", cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif", width: "100%" }}
+          >
+            + Add Contact
+          </button>
+        </div>
         <GreenBtn onClick={function() { props.onSave(d); }} style={{ width: "100%", padding: "12px", fontSize: 14, borderRadius: 24 }}>
           Save Changes
         </GreenBtn>
@@ -1507,8 +1592,31 @@ function AddEventModal(props) {
 }
 
 function AddPartnerModal(props) {
-  const [f, setF] = useState({ name: "", revenue: "", tier: "Mid", status: "green", objective: "" });
+  const [f, setF] = useState({ name: "", revenue: "", tier: "Mid", status: "green", objective: "", attendees: [] });
   function sf(k, v) { setF(function(p) { return Object.assign({}, p, { [k]: v }); }); }
+  function addAttendee() {
+    setF(function(p) {
+      return Object.assign({}, p, {
+        attendees: p.attendees.concat([{ id: "a" + Date.now(), name: "", title: "", poc: p.attendees.length === 0, notes: "" }]),
+      });
+    });
+  }
+  function updateAttendee(id, key, val) {
+    setF(function(p) {
+      return Object.assign({}, p, {
+        attendees: p.attendees.map(function(a) {
+          return a.id === id ? Object.assign({}, a, { [key]: val }) : a;
+        }),
+      });
+    });
+  }
+  function removeAttendee(id) {
+    setF(function(p) {
+      return Object.assign({}, p, {
+        attendees: p.attendees.filter(function(a) { return a.id !== id; }),
+      });
+    });
+  }
   return (
     <Modal onClose={props.onClose} title="Add Partner">
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -1556,6 +1664,50 @@ function AddPartnerModal(props) {
             })}
           </div>
         </div>
+        <div>
+          <FL>Contacts</FL>
+          {f.attendees.map(function(a) {
+            return (
+              <div key={a.id} style={{ background: C.bgDark, border: "1px solid " + C.border, borderRadius: 8, padding: "10px 12px", marginBottom: 8 }}>
+                <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+                  <input
+                    value={a.name}
+                    onChange={function(e) { updateAttendee(a.id, "name", e.target.value); }}
+                    placeholder="Name"
+                    style={Object.assign({}, inp, { flex: 1 })}
+                  />
+                  <button
+                    onClick={function() { removeAttendee(a.id); }}
+                    style={{ background: "rgba(248,113,113,0.1)", color: C.red, border: "none", borderRadius: 6, padding: "6px 10px", cursor: "pointer", fontSize: 13 }}
+                  >
+                    x
+                  </button>
+                </div>
+                <input
+                  value={a.title}
+                  onChange={function(e) { updateAttendee(a.id, "title", e.target.value); }}
+                  placeholder="Title"
+                  style={Object.assign({}, inp, { marginBottom: 6 })}
+                />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <input
+                    type="checkbox"
+                    checked={!!a.poc}
+                    onChange={function() { updateAttendee(a.id, "poc", !a.poc); }}
+                    style={{ cursor: "pointer" }}
+                  />
+                  <span style={{ fontSize: 11, color: C.textMuted }}>Primary contact (POC)</span>
+                </div>
+              </div>
+            );
+          })}
+          <button
+            onClick={addAttendee}
+            style={{ background: C.bgDark, color: C.textMuted, border: "1px dashed " + C.border, borderRadius: 20, padding: "7px 14px", cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif", width: "100%" }}
+          >
+            + Add Contact
+          </button>
+        </div>
         <GreenBtn onClick={function() { props.onAdd(f); }} style={{ width: "100%", padding: "12px", fontSize: 14, borderRadius: 24 }}>
           Add Partner
         </GreenBtn>
@@ -1586,6 +1738,12 @@ function HotelModal(props) {
   return (
     <Modal onClose={props.onClose} title="Hotel Info">
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div>
+          <FL>Address</FL>
+          <div style={{ position: "relative", zIndex: 10 }}>
+            <AddressSearch value={d.address || ""} onChange={function(v) { sf("address", v); }} placeholder="Search hotel..." />
+          </div>
+        </div>
         {[
           { l: "Hotel Name",    k: "name" },
           { l: "Phone",         k: "phone" },
@@ -1600,10 +1758,6 @@ function HotelModal(props) {
             </div>
           );
         })}
-        <div>
-          <FL>Address</FL>
-          <AddressSearch value={d.address || ""} onChange={function(v) { sf("address", v); }} placeholder="Search hotel..." />
-        </div>
         <GreenBtn
           onClick={function() { props.onChange(d); props.onClose(); }}
           style={{ width: "100%", padding: "11px", fontSize: 13, borderRadius: 24 }}
@@ -1766,7 +1920,7 @@ function PipChatModal(props) {
     var history = msgs.concat([userMsg]).map(function(m) {
       return { role: m.sender === "user" ? "user" : "assistant", content: m.content };
     });
-    fetch("https://api.anthropic.com/v1/messages", {
+    fetch("/api/pip", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -2047,7 +2201,7 @@ function AIImportModal(props) {
     setIsLoading(true);
     setErrMsg("");
     var prompt = "Extract all conference sessions from this text. Return ONLY a JSON array. Each object must have: title, day (use Day 1, Day 2, Day 3), time (like 9:00 AM), end (like 10:00 AM), location, track (one of: Conference, Partner Meeting, Meal/Reception, Keynote, Logistics, Open Slot). Return ONLY the JSON array.\n\n" + inputText.slice(0, 3000);
-    fetch("https://api.anthropic.com/v1/messages", {
+    fetch("/api/pip", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -2065,10 +2219,10 @@ function AIImportModal(props) {
       if (Array.isArray(parsed) && parsed.length > 0) {
         props.onImport(parsed);
       } else {
-        setErrMsg("Couldn't find events. Try pasting more.");
+        setErrMsg("Pip could not find any events in that text. Try pasting a plain text version of the schedule.");
       }
     }).catch(function() {
-      setErrMsg("Something went wrong. Try plain text.");
+      setErrMsg("Pip could not connect. Check your API credits at console.anthropic.com, then try again.");
     }).finally(function() { setIsLoading(false); });
   }
   if (!mode) {
@@ -2459,8 +2613,8 @@ function Onboarding(props) {
     },
     {
       id: "intro",
-      title: "Hey — I'm Pip.",
-      pipSpeech: "Your AI conference assistant. I'll be with you the whole time — briefing you before meetings, helping you take notes, and occasionally pointing out things you might not want to hear. In a helpful way. Mostly.",
+      title: "Hey -- I'm Pip.",
+      pipSpeech: "Your AI conference assistant. I'll be with you the whole time -- briefing you before meetings, helping you take notes, and occasionally pointing out things you might not want to hear. In a helpful way. Mostly.",
     },
     {
       id: "features",
@@ -2475,7 +2629,7 @@ function Onboarding(props) {
     {
       id: "ready",
       title: "Ready when you are.",
-      pipSpeech: "One last thing — tap me anytime you need help. I'll be right there. Well... floating around somewhere nearby. You'll find me.",
+      pipSpeech: "One last thing -- tap me anytime you need help. I'll be right there. Well... floating around somewhere nearby. You'll find me.",
       isLast: true,
     },
   ];
@@ -2663,7 +2817,7 @@ function Onboarding(props) {
                   onClick={props.onDone}
                   style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, fontFamily: "'DM Sans',sans-serif", padding: "8px" }}
                 >
-                  {"Skip — add manually"}
+                  {"Skip -- add manually"}
                 </button>
               </div>
             )}
