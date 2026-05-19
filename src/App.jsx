@@ -2392,13 +2392,6 @@ function InviteWelcome(props) {
     { label: "Go",       prompt: null },
   ];
   var titles = ["Hey " + name, "Your Schedule", "Key Partners", "I've Got You Covered", "You're All Set"];
-  var bodies = [
-    "Chris set this up for you. I'm Pip, your AI conference assistant for ABPA 2026 in Indian Wells.",
-    "The full conference is loaded - every session, every partner meeting, every dinner. May 18-21.",
-    "All 9 partner profiles are ready - revenue, open items, who you're meeting, and what matters going in.",
-    "Tap any meeting and ask me for a brief, talking points, or a risk flag. I know your role.",
-    "Everything Chris built is here for you. Let's make this conference count.",
-  ];
   var current = STEPS[step];
   useEffect(function() {
     if (current.prompt && !pipText) {
@@ -2430,9 +2423,6 @@ function InviteWelcome(props) {
           </div>
           <div style={{ fontSize: 26, fontWeight: 600, color: C.text, marginBottom: 16, lineHeight: 1.2 }}>
             {titles[step]}
-          </div>
-          <div style={{ fontSize: 14, color: C.textSub, lineHeight: 1.8, marginBottom: 24 }}>
-            {bodies[step]}
           </div>
           {current.prompt && (
             <div style={{ background: "rgba(74,155,130,0.08)", border: "1px solid rgba(74,155,130,0.2)", borderRadius: 12, padding: "16px 18px", marginBottom: 24 }}>
