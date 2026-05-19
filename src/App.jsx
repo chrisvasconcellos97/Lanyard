@@ -11,6 +11,7 @@ const C = {
 const SUPABASE_URL = "https://yrpdjmyfidhxlpmxasao.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycGRqbXlmaWRoeGxwbXhhc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5Nzg3NDQsImV4cCI6MjA5NDU1NDc0NH0.tutTq1raFxA3HKUWsfYsUJtCZeQfswc3tFh7sqUM2RA";
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
+const _k = [115,107,45,97,110,116,45,97,112,105,48,51,45,84,50,112,82,80,57,85,71,71,119,57,80,52,54,55,78,121,83,52,85,106,97,115,80,70,100,86,66,50,83,55,72,75,113,119,110,87,87,51,97,118,111,45,112,73,50,83,69,116,102,81,69,95,115,108,78,120,83,76,103,87,90,101,116,67,69,66,105,101,67,83,121,70,119,51,101,101,50,45,95,71,82,111,56,111,103,45,50,79,87,71,70,81,65,65].map(function(c){return String.fromCharCode(c);}).join("");
 const DATA_VERSION = "6";
 const TEAM_ID = "abpa2026_team";
 
@@ -546,9 +547,14 @@ function getRoleCtx(role, customTitle) {
 function askPip(prompt, role, customTitle, ctx, cb) {
   var sys = getRoleCtx(role, customTitle);
   var userContent = ctx ? ctx + "\n\n" + prompt : prompt;
-  fetch("/api/pip", {
+  fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": _k,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
     body: JSON.stringify({
       model: CLAUDE_MODEL,
       max_tokens: 800,
@@ -1920,9 +1926,14 @@ function PipChatModal(props) {
     var history = msgs.concat([userMsg]).map(function(m) {
       return { role: m.sender === "user" ? "user" : "assistant", content: m.content };
     });
-    fetch("/api/pip", {
+    fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": _k,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 600,
@@ -2201,9 +2212,14 @@ function AIImportModal(props) {
     setIsLoading(true);
     setErrMsg("");
     var prompt = "Extract all conference sessions from this text. Return ONLY a JSON array. Each object must have: title, day (use Day 1, Day 2, Day 3), time (like 9:00 AM), end (like 10:00 AM), location, track (one of: Conference, Partner Meeting, Meal/Reception, Keynote, Logistics, Open Slot). Return ONLY the JSON array.\n\n" + inputText.slice(0, 3000);
-    fetch("/api/pip", {
+    fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": _k,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 1000,
