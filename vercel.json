@@ -1,7 +1,5 @@
 {
-  "functions": {
-    "api/pip.js": {
-      "runtime": "edge"
-    }
-  }
+  "rewrites": [
+    { "source": "/api/pip", "destination": "/api/pip.js" }
+  ]
 }
