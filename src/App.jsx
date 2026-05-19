@@ -3347,9 +3347,10 @@ function ScheduleView(props) {
     );
   }
   var di = sessions.filter(function(s) { return s.day === day; });
-  var vis = qf
+  var vis = (qf
     ? di.filter(function(s) { return ["Partner Meeting","Meal/Reception"].includes(s.track) && !s.isChild; })
-    : di.filter(function(s) { return !s.isChild && filters[s.track]; });
+    : di.filter(function(s) { return !s.isChild && filters[s.track]; })
+  ).sort(function(a, b) { return parseTime(a.time) - parseTime(b.time); });
   var kids = sessions.filter(function(s) { return s.isChild && s.day === day; });
   return (
     <div>
