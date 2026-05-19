@@ -2381,96 +2381,241 @@ function InviteWelcome(props) {
   var name = props.name || "there";
   var role = props.role || "am";
   var roleDesc = role === "vp" ? "VP" : role === "dir" ? "Director" : "Account Manager";
+
+  var SLIDES = [
+    {
+      id: "welcome",
+      isWelcome: true,
+    },
+    {
+      id: "intro",
+      title: "Hey -- I'm Pip.",
+      prompt: "Welcome " + name + " who is a " + roleDesc + " to Lanyard -- a conference app built by Chris Vasconcellos for ABPA 2026. Be warm and slightly excited. Then make a dry witty remark about how impressive it is that Chris built this. Ghost from Destiny 2 energy -- loyal, slightly anxious, genuinely funny.",
+    },
+    {
+      id: "schedule",
+      title: "Your schedule is loaded.",
+      prompt: "Tell " + name + " (a " + roleDesc + ") what is waiting for them in the app. ABPA 2026, May 18-21, Indian Wells. Partner meetings, keynotes, networking. All pre-loaded. Keep it punchy and a little excited.",
+    },
+    {
+      id: "partners",
+      title: "Know before you walk in.",
+      prompt: "Tell " + name + " (a " + roleDesc + ") about the partner context in the app. 9 partner profiles, revenue, open items, who they are meeting. LKQ at $222M is the top account with open items. Be specific and a little anxious about LKQ.",
+    },
+    {
+      id: "ready",
+      title: "Ready when you are.",
+      prompt: "Give " + name + " (a " + roleDesc + ") a send-off. Tell them how Pip will help during meetings -- " + (role === "vp" ? "tight executive summaries" : role === "dir" ? "strategic context" : "full detail on every account") + ". End with something characteristically Pip -- warm, slightly nervous, genuinely caring.",
+      isLast: true,
+    },
+  ];
+
   const [step, setStep] = useState(0);
   const [pipText, setPipText] = useState("");
   const [loading, setLoading] = useState(false);
-  var STEPS = [
-    { label: "Welcome",  prompt: "Give a warm 2-sentence personal welcome to " + name + " who is a " + roleDesc + " about to use a conference app called Lanyard built by Chris Vasconcellos for ABPA 2026. Be personal and excited." },
-    { label: "Schedule", prompt: "In 2 sentences tell " + name + " (a " + roleDesc + ") what to expect from the ABPA 2026 schedule. May 18-21 Indian Wells. Partner meetings, keynotes, networking all pre-loaded." },
-    { label: "Partners", prompt: "In 2 sentences explain to " + name + " why having partner context before meetings matters. Mention LKQ at $222M is the top account with open items needing attention." },
-    { label: "Pip",      prompt: "In 2 sentences tell " + name + " how Pip will help them. Be specific about their role - " + (role === "vp" ? "short executive summaries" : role === "dir" ? "strategic context" : "full operational detail") + "." },
-    { label: "Go",       prompt: null },
-  ];
-  var titles = ["Hey " + name, "Your Schedule", "Key Partners", "I've Got You Covered", "You're All Set"];
-  var current = STEPS[step];
+  const [pipVisible, setPipVisible] = useState(false);
+  const [pipReturning, setPipReturning] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [emerged, setEmerged] = useState(false);
+  const [lanyardPipOffset, setLanyardPipOffset] = useState({ y: 0, scale: 0.1, opacity: 0 });
+  const [lanyardPipState, setLanyardPipState] = useState("hidden");
+  const buttonTimer = useRef(null);
+  const currentSlide = SLIDES[step];
+
+  function releasePipFromLanyard() {
+    if (lanyardPipState !== "hidden") return;
+    setLanyardPipState("emerging");
+    setLanyardPipOffset({ y: -90, scale: 1, opacity: 1 });
+    setTimeout(function() {
+      setLanyardPipOffset({ y: -90, scale: 1, opacity: 0 });
+      setLanyardPipState("gone");
+      setTimeout(function() {
+        setPipVisible(true);
+        setEmerged(true);
+        buttonTimer.current = setTimeout(function() {
+          setShowButton(true);
+        }, 2000);
+      }, 200);
+    }, 700);
+  }
+
   useEffect(function() {
-    if (current.prompt && !pipText) {
+    if (step > 0 && currentSlide.prompt && !pipText) {
       setLoading(true);
-      askPip(current.prompt, role, "", "", function(err, result) {
+      askPip(currentSlide.prompt, role, "", "", function(err, result) {
         setPipText(result);
         setLoading(false);
       });
     }
   }, [step]);
-  function next() {
-    if (step < STEPS.length - 1) {
-      setPipText("");
-      setStep(function(s) { return s + 1; });
-    } else {
-      props.onDone();
+
+  function handleNext() {
+    if (step === SLIDES.length - 1) {
+      setPipReturning(true);
+      setTimeout(function() {
+        setPipVisible(false);
+        props.onDone();
+      }, 700);
+      return;
     }
+    setPipText("");
+    setShowButton(false);
+    setStep(function(s) { return s + 1; });
+    buttonTimer.current = setTimeout(function() {
+      setShowButton(true);
+    }, 1800);
   }
+
+  useEffect(function() {
+    return function() { clearTimeout(buttonTimer.current); };
+  }, []);
+
+  var lanyardPipTransition = "none";
+  if (lanyardPipState === "emerging") {
+    lanyardPipTransition = "transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease";
+  } else if (lanyardPipState === "gone") {
+    lanyardPipTransition = "opacity 0.2s ease";
+  }
+
   return (
     <div style={{ fontFamily: "'DM Sans',sans-serif", background: C.bg, minHeight: "100vh", display: "flex", flexDirection: "column", color: C.text }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 400, margin: "0 auto", width: "100%", padding: "60px 32px 40px" }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
-          <PipMark size={28} color={C.accent} glow pulse />
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 11, color: C.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
-            {"Pip - " + current.label}
+      <FloatingPipFree visible={pipVisible} returning={pipReturning} />
+      <div
+        onClick={currentSlide.isWelcome && !emerged ? releasePipFromLanyard : undefined}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "60px 32px 40px",
+          maxWidth: 400,
+          margin: "0 auto",
+          width: "100%",
+          cursor: currentSlide.isWelcome && !emerged ? "pointer" : "default",
+          userSelect: "none",
+          textAlign: "center",
+        }}
+      >
+        {currentSlide.isWelcome && (
+          <div style={{ animation: "fadeIn 0.4s ease" }}>
+            <div style={{ position: "relative", marginBottom: 36, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%) translateY(" + lanyardPipOffset.y + "px) scale(" + lanyardPipOffset.scale + ")",
+                opacity: lanyardPipOffset.opacity,
+                transition: lanyardPipTransition,
+                zIndex: 10,
+                pointerEvents: "none",
+              }}>
+                <div
+                  className="pip-sonar"
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: "50%",
+                    background: "rgba(74,155,130,0.15)",
+                    border: "1px solid rgba(74,155,130,0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    boxShadow: "0 0 24px rgba(74,155,130,0.4), 0 0 48px rgba(74,155,130,0.1)",
+                  }}
+                >
+                  <PipMark size={14} color={C.accent} glow pulse />
+                </div>
+              </div>
+              <LanyardLogo size={72} color={C.accent} />
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 700, color: C.text, letterSpacing: "-0.5px", marginBottom: 12 }}>
+              LANYARD
+            </div>
+            <div style={{ fontSize: 15, color: C.textSub, fontWeight: 300, letterSpacing: "0.04em", marginBottom: 32 }}>
+              {"Hey " + name + ". Chris set this up for you."}
+            </div>
+            {!emerged && (
+              <div style={{ fontSize: 12, color: C.textMuted, animation: "fadeInOut 2s ease-in-out infinite" }}>
+                tap anywhere to begin
+              </div>
+            )}
+            {emerged && showButton && (
+              <div style={{ animation: "fadeIn 0.5s ease" }}>
+                <GreenBtn
+                  onClick={handleNext}
+                  style={{ padding: "13px 40px", fontSize: 15, borderRadius: 24 }}
+                >
+                  Continue
+                </GreenBtn>
+              </div>
+            )}
           </div>
-          <div style={{ fontSize: 26, fontWeight: 600, color: C.text, marginBottom: 16, lineHeight: 1.2 }}>
-            {titles[step]}
-          </div>
-          {current.prompt && (
-            <div style={{ background: "rgba(74,155,130,0.08)", border: "1px solid rgba(74,155,130,0.2)", borderRadius: 12, padding: "16px 18px", marginBottom: 24 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: loading ? 0 : 10 }}>
-                <PipMark size={10} color={C.accent} glow pulse={loading} />
-                <div style={{ fontSize: 10, color: C.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>Pip says</div>
+        )}
+
+        {!currentSlide.isWelcome && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20, animation: "fadeIn 0.4s ease", width: "100%" }}>
+            <div style={{ fontSize: 26, fontWeight: 600, color: C.text, lineHeight: 1.2, marginBottom: 4 }}>
+              {currentSlide.title}
+            </div>
+            <div style={{ background: "rgba(74,155,130,0.08)", border: "1px solid rgba(74,155,130,0.2)", borderRadius: 16, padding: "14px 18px", width: "100%", textAlign: "left" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <PipMark size={9} color={C.accent} glow pulse={loading} />
+                <div style={{ fontSize: 10, color: C.accent, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>Pip</div>
               </div>
               {loading
-                ? <div style={{ fontSize: 12, color: C.textMuted, marginTop: 8 }}>Thinking...</div>
+                ? <div style={{ fontSize: 13, color: C.textMuted }}>Give me a second. I'm pulling this together...</div>
                 : <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.8 }}>{pipText}</div>
               }
             </div>
-          )}
-          {step === STEPS.length - 1 && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 24 }}>
-              {[
-                { l: "Partner Meetings", v: "9",      c: C.accentOrange },
-                { l: "Conference Days",  v: "4",      c: C.accent },
-                { l: "Sessions Loaded", v: "21",      c: C.blue },
-                { l: "Your Role",       v: roleDesc,  c: C.purple },
-              ].map(function(s) {
-                return (
-                  <div key={s.l} style={{ background: C.bgCard, border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px" }}>
-                    <div style={{ fontSize: s.v.length > 4 ? 13 : 20, fontWeight: 600, color: s.c, marginBottom: 3 }}>{s.v}</div>
-                    <div style={{ fontSize: 10, color: C.textMuted }}>{s.l}</div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div>
-          <div style={{ display: "flex", gap: 5, justifyContent: "center", marginBottom: 24 }}>
-            {STEPS.map(function(_, i) {
+            {currentSlide.isLast && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, width: "100%" }}>
+                {[
+                  { l: "Partner Meetings", v: "9",      c: C.accentOrange },
+                  { l: "Conference Days",  v: "4",      c: C.accent },
+                  { l: "Sessions Loaded", v: "21",      c: C.blue },
+                  { l: "Your Role",       v: roleDesc,  c: C.purple },
+                ].map(function(s) {
+                  return (
+                    <div key={s.l} style={{ background: C.bgCard, border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px" }}>
+                      <div style={{ fontSize: s.v.length > 4 ? 13 : 20, fontWeight: 600, color: s.c, marginBottom: 3 }}>{s.v}</div>
+                      <div style={{ fontSize: 10, color: C.textMuted }}>{s.l}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {emerged && (
+          <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 32, marginBottom: 20 }}>
+            {SLIDES.map(function(_, i) {
               return (
                 <div
                   key={i}
-                  style={{ width: i === step ? 24 : 6, height: 6, borderRadius: 3, background: i === step ? C.accent : i < step ? C.accentDim : C.bgPillActive, transition: "all 0.2s" }}
+                  style={{ width: i === step ? 24 : 6, height: 6, borderRadius: 3, background: i === step ? C.accent : C.bgPillActive, transition: "all 0.3s ease" }}
                 />
               );
             })}
           </div>
-          <GreenBtn onClick={next} disabled={loading} style={{ width: "100%", padding: "14px", fontSize: 15, borderRadius: 24 }}>
-            {step === STEPS.length - 1 ? "Open Lanyard" : "Next"}
-          </GreenBtn>
-        </div>
+        )}
+
+        {!currentSlide.isWelcome && showButton && (
+          <div style={{ animation: "fadeIn 0.5s ease", marginTop: 8 }}>
+            <GreenBtn
+              onClick={handleNext}
+              disabled={loading}
+              style={{ padding: "13px 40px", fontSize: 15, borderRadius: 24 }}
+            >
+              {currentSlide.isLast ? "Open Lanyard" : "Continue"}
+            </GreenBtn>
+          </div>
+        )}
       </div>
-      <style>{".pip-pulse{animation:pipPulse 2s ease-in-out infinite}@keyframes pipPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(0.92)}}"}</style>
+      <style>{".pip-pulse{animation:pipPulse 2s ease-in-out infinite}@keyframes pipPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(0.92)}}@keyframes fadeInOut{0%,100%{opacity:0.3}50%{opacity:0.8}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.pip-sonar{position:relative}.pip-sonar::before,.pip-sonar::after{content:'';position:absolute;top:50%;left:50%;width:48px;height:48px;border-radius:50%;border:1px solid rgba(74,155,130,0.4);transform:translate(-50%,-50%) scale(1);animation:sonarRing 3s ease-out infinite;pointer-events:none;z-index:-1}.pip-sonar::after{animation-delay:1.5s}@keyframes sonarRing{0%{transform:translate(-50%,-50%) scale(1);opacity:0.6}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0}}"}</style>
     </div>
   );
 }
